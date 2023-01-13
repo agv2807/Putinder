@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1007223360151",
+    "project_id": "putinder-a9cbf",
+    "storage_bucket": "putinder-a9cbf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007223360151:android:19bee0a2789274803537d2",
+        "android_client_info": {
+          "package_name": "com.example.putinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007223360151-4egr11anp7k6nu2kae9eqk9k6t1eopfb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8WTrqyMLYQeHzKUp0ua-wACsO75spkwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007223360151-4egr11anp7k6nu2kae9eqk9k6t1eopfb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

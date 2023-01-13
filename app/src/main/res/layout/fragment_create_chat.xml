@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/new_chat"
+        android:layout_marginHorizontal="18dp"
+        android:textSize="24sp"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/search_user_edit_text"
+        android:hint="@string/search"
+        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/users_list_recycler_view"
+        android:layout_marginHorizontal="14dp"
+        tools:listitem="@layout/chats_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

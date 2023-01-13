@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/news_item"
+        android:icon="@drawable/news_icon"
+        android:title="news"/>
+
+    <item
+        android:id="@+id/chats_item"
+        android:icon="@drawable/chats_icon"
+        android:title="chats" />
+
+    <item
+        android:id="@+id/swipes_item"
+        android:icon="@drawable/swipes_icon"
+        android:title="swipes" />
+
+    <item
+        android:id="@+id/likes_item"
+        android:icon="@drawable/likes_icon"
+        android:title="likes" />
+
+    <item
+        android:id="@+id/profile_item"
+        android:icon="@drawable/profile_icon"
+        android:title="profile" />
+
+</menu>

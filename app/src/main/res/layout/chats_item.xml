@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:elevation="8dp"
+    android:layout_margin="4dp"
+    android:background="@color/white"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/chat_cont"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="100dp"
+            android:layout_margin="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:id="@+id/user_photo_message"
+                android:scaleType="centerCrop"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/chat_name_text_view"
+                android:text="Имя"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/last_message_text_view"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:text="Последнее сообщение"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/date_chat_text_view"
+        android:layout_alignParentEnd="true"
+        android:text="Time"
+        android:layout_margin="12dp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

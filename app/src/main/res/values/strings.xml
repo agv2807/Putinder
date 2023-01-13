@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Putinder</string>
+    <string name="sign_in">Войти</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="name">Имя</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="confirm_password">Подтвердить пароль</string>
+    <string name="auth">Авторизоваться</string>
+    <string name="message">Сообщение</string>
+    <string name="search">Найти</string>
+    <string name="new_chat">Новый чат</string>
+    <string name="description">Описание</string>
+    <string name="reviews">Отзывы</string>
+</resources>
