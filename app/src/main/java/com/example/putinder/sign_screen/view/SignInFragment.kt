@@ -18,6 +18,7 @@ import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfoAuth
 import com.example.putinder.sign_screen.view_model.SignViewModel
+import org.w3c.dom.Text
 
 class SignInFragment : Fragment() {
 
@@ -63,10 +64,14 @@ class SignInFragment : Fragment() {
         super.onStart()
 
         signButton.setOnClickListener {
-            onLoadResume()
-            val userInfoAuth = UserInfoAuth(loginEditText.text.toString(),
-            passwordEditText.text.toString())
-            signViewModel.updateAuthUserInfo(userInfoAuth)
+            if (loginEditText.text.isEmpty() || passwordEditText.text.isEmpty()) {
+                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
+            } else {
+                onLoadResume()
+                val userInfoAuth = UserInfoAuth(loginEditText.text.toString(),
+                    passwordEditText.text.toString())
+                signViewModel.updateAuthUserInfo(userInfoAuth)
+            }
         }
 
         regTextView.setOnClickListener {

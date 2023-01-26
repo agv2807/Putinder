@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.putinder.content_screen.chats_screen.Chat
+import com.example.putinder.content_screen.chats_screen.models.Chat
 import com.example.putinder.content_screen.chats_screen.api.RestApiService
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage

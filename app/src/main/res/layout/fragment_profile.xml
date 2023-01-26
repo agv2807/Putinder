@@ -41,6 +41,8 @@
                 android:id="@+id/user_name_text_view"
                 android:textColor="@color/black"
                 android:textSize="24sp"
+                android:gravity="center_vertical"
+                android:drawableEnd="@drawable/ic_baseline_edit_24"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

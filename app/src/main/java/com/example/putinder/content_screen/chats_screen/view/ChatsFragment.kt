@@ -18,8 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.putinder.QueryPreferences.QueryPreferences
 import com.example.putinder.R
-import com.example.putinder.bitmap.getScaledBitmap
-import com.example.putinder.content_screen.chats_screen.Chat
+import com.example.putinder.content_screen.chats_screen.models.Chat
 import com.example.putinder.content_screen.chats_screen.view_model.ChatsViewModel
 import com.example.putinder.content_screen.chats_screen.chat_screen.view.ChatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton

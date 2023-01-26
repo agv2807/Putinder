@@ -110,7 +110,7 @@ class SwipesFragment : Fragment(), CardStackListener {
             if (placeInfo.uri.isNotEmpty()) {
                 Glide
                     .with(this@SwipesFragment)
-                    .load(placeInfo.uri)
+                    .load(placeInfo.uri[index])
                     .centerCrop()
                     .placeholder(R.color.gray)
                     .into(image)

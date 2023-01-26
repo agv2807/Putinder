@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.putinder.QueryPreferences.QueryPreferences
 import com.example.putinder.R
@@ -48,10 +47,15 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         profilePhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, REQUEST_CODE)
+        }
+
+        userNameTextView.setOnClickListener {
+            showChangeNameDialog()
         }
     }
 
@@ -91,6 +95,15 @@ class ProfileFragment : Fragment() {
 
     private fun updateUI(userResponse: ProfileResponse) {
         userNameTextView.text = userResponse.name
+    }
+
+    private fun showChangeNameDialog() {
+        val dialog = EditTextDialog.newInstance(userNameTextView.text.toString())
+        dialog.onOk = {
+            val newName = dialog.editText.text.toString()
+            profileViewModel.updateUserName(newName)
+        }
+        dialog.show(this@ProfileFragment.requireFragmentManager(), "editDescription")
     }
 
     companion object {

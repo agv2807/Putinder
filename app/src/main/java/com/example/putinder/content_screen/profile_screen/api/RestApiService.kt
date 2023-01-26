@@ -29,10 +29,31 @@ class RestApiService {
         )
     }
 
-    fun updateUserInfo(token: String?, name: String?, image: String?, onResult: (ProfileResponse?) -> Unit) {
+    fun updateUserPhoto(token: String?, image: String?, onResult: (ProfileResponse?) -> Unit) {
         val retrofit = ServiceBuilder.buildService(Api::class.java)
 
-        retrofit.updateUserInfo("Bearer $token", name, image).enqueue(
+        retrofit.updateUserPhoto("Bearer $token", image).enqueue(
+            object : Callback<ProfileResponse> {
+                override fun onResponse(
+                    call: Call<ProfileResponse>,
+                    response: Response<ProfileResponse>
+                ) {
+                    val userInfo = response.body()
+                    onResult(userInfo)
+                }
+
+                override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                    onResult(null)
+                }
+
+            }
+        )
+    }
+
+    fun updateUserName(token: String?, name: String?, onResult: (ProfileResponse?) -> Unit) {
+        val retrofit = ServiceBuilder.buildService(Api::class.java)
+
+        retrofit.updateUserName("Bearer $token", name).enqueue(
             object : Callback<ProfileResponse> {
                 override fun onResponse(
                     call: Call<ProfileResponse>,

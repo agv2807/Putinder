@@ -1,6 +1,6 @@
 package com.example.putinder.content_screen.chats_screen.api
 
-import com.example.putinder.content_screen.chats_screen.Chat
+import com.example.putinder.content_screen.chats_screen.models.Chat
 import com.example.putinder.retrofit.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback

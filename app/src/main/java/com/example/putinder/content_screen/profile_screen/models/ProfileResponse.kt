@@ -4,5 +4,5 @@ data class ProfileResponse(
     val login: String,
     val id: String,
     var image: String,
-    val name: String
+    var name: String
 )

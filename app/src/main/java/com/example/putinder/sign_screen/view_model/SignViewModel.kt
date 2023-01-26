@@ -1,6 +1,7 @@
 package com.example.putinder.sign_screen.view_model
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +20,7 @@ class SignViewModel : ViewModel() {
 
     val userInfoLiveData = MutableLiveData<UserResponse>()
     val userPhotoLiveData = MutableLiveData<Uri>()
-    val photoIdLiveData = MutableLiveData<String>()
+    val photoIdLiveData = MutableLiveData<String>("")
 
     private val apiService = RestApiService()
 
@@ -48,7 +49,6 @@ class SignViewModel : ViewModel() {
     }
 
     fun uploadPhoto(uri: Uri) {
-        userPhotoLiveData.value = uri
 
         viewModelScope.launch {
             val id = UUID.randomUUID()
@@ -64,19 +64,22 @@ class SignViewModel : ViewModel() {
                 reference.downloadUrl
             }.addOnCompleteListener {
                 if (it.isSuccessful) {
+                    userPhotoLiveData.value = uri
                     photoIdLiveData.value = id.toString()
                 }
             }
         }
     }
 
-    fun checkToken(token: String): Boolean {
-        var tokenIsGood = true
+    fun checkToken(token: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
             apiService.getUserInfoResponse(token) {
-                tokenIsGood = it?.id != null
+                if (it != null) {
+                    onResult(true)
+                } else {
+                    onResult(false)
+                }
             }
         }
-        return tokenIsGood
     }
 }

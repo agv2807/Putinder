@@ -1,4 +1,4 @@
-package com.example.putinder.content_screen.chats_screen
+package com.example.putinder.content_screen.chats_screen.models
 
 import com.example.putinder.content_screen.profile_screen.models.ProfileResponse
 

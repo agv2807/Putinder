@@ -74,12 +74,19 @@ class SignUpFragment : Fragment() {
         super.onStart()
 
         signButton.setOnClickListener {
-            onLoadResume()
-            val userInfo = UserInfo(loginEditText.text.toString(),
-                passwordEditText.text.toString(),
-                nameEditText.text.toString(),
-                photoId)
-            signViewModel.updateUserInfo(userInfo)
+            if (loginEditText.text.isEmpty() || passwordEditText.text.isEmpty()
+                || nameEditText.text.isEmpty() || confirmPasswordEditText.text.isEmpty()) {
+                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
+            } else if (passwordEditText.text != confirmPasswordEditText.text){
+                Toast.makeText(requireContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show()
+            } else {
+                onLoadResume()
+                val userInfo = UserInfo(loginEditText.text.toString(),
+                    passwordEditText.text.toString(),
+                    nameEditText.text.toString(),
+                    photoId)
+                signViewModel.updateUserInfo(userInfo)
+            }
         }
 
         authTextView.setOnClickListener {

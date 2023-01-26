@@ -29,8 +29,8 @@ class ProfileViewModel : ViewModel() {
             apiService.getUserInfoResponse(token) {
                 if (it?.id != null) {
                     userInfoLiveData.value = it
-                    storageRef.child("images/${it.image}").downloadUrl.addOnSuccessListener {
-                        userPhotoLiveData.value = it
+                    storageRef.child("images/${it.image}").downloadUrl.addOnSuccessListener { uri ->
+                        userPhotoLiveData.value = uri
                     }.addOnFailureListener {
                         Log.d("TAG", "Error load photo")
                     }
@@ -41,16 +41,18 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    private fun updateUserInfo(name: String?, image: String?) {
-        apiService.updateUserInfo(myToken, name, image) {
-            if (it?.image != null) {
-                storageRef.child("images/${image}").downloadUrl.addOnSuccessListener { uri ->
-                    userPhotoLiveData.value = uri
-                }.addOnFailureListener {
-                    Log.d("TAG", "Error load photo")
+    private fun updateUserPhoto(image: String?) {
+        viewModelScope.launch {
+            apiService.updateUserPhoto(myToken, image) {
+                if (it?.image != null) {
+                    storageRef.child("images/${image}").downloadUrl.addOnSuccessListener { uri ->
+                        userPhotoLiveData.value = uri
+                    }.addOnFailureListener {
+                        Log.d("TAG", "Error load photo")
+                    }
+                } else {
+                    Log.d("TAG", "Image = null")
                 }
-            } else {
-                Log.d("TAG", "Error load user info")
             }
         }
     }
@@ -71,7 +73,19 @@ class ProfileViewModel : ViewModel() {
                 reference.downloadUrl
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    updateUserInfo(null, id.toString())
+                    updateUserPhoto(id.toString())
+                }
+            }
+        }
+    }
+
+    fun updateUserName(name: String) {
+        viewModelScope.launch {
+            apiService.updateUserName(myToken, name) {
+                if (it?.name != null) {
+                    userInfoLiveData.value = it
+                } else {
+                    Log.d("ProfileViewModel", "Error load name")
                 }
             }
         }

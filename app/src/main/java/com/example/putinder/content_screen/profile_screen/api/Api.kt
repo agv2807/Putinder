@@ -13,9 +13,13 @@ interface Api {
 
     @FormUrlEncoded
     @PUT("users")
-    fun updateUserInfo(@Header("Authorization") token: String?,
-                       @Field("name") name: String?,
-                       @Field("image") image: String?
+    fun updateUserPhoto(@Header("Authorization") token: String?,
+                        @Field("image") image: String?
     ): Call<ProfileResponse>
 
+    @FormUrlEncoded
+    @PUT("users")
+    fun updateUserName(@Header("Authorization") token: String?,
+                       @Field("name") name: String?
+    ): Call<ProfileResponse>
 }
