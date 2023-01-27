@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +39,7 @@ import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfoAuth
 import com.example.putinder.sign_screen.view_model.SignViewModel
+import kotlin.math.sign
 
 class SignInComposeFragment : Fragment() {
 
@@ -75,7 +76,7 @@ class SignInComposeFragment : Fragment() {
         signViewModel.userInfoLiveData.observe(
             viewLifecycleOwner,
             Observer {
-                //onLoadFinish()
+                signViewModel.loading.value = false
                 if (it == null) {
                     Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show()
                 } else {
@@ -91,97 +92,113 @@ class SignInComposeFragment : Fragment() {
     @Composable
     private fun UpdateUI() {
 
-        val loginValue = remember { mutableStateOf(TextFieldValue()) }
-        val passwordValue = remember { mutableStateOf(TextFieldValue()) }
+        val loginValue = remember { mutableStateOf(TextFieldValue("akljsdn")) }
+        val passwordValue = remember { mutableStateOf(TextFieldValue("klsamndkn")) }
+        val loading = signViewModel.loading.observeAsState()
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-
-            Image(
-                painter = painterResource(id = R.drawable.img),
-                contentDescription = "image",
-                modifier = Modifier.fillMaxHeight(0.5f),
-                contentScale = ContentScale.Crop
-            )
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                value = loginValue.value,
-                onValueChange = {loginValue.value = it},
-                placeholder = { Text(text = "Логин")},
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text
-                ),
-                textStyle = TextStyle(
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily.Serif
-                ),
-                maxLines = 1,
-                singleLine = true,
-            )
-
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                value = passwordValue.value,
-                onValueChange = {passwordValue.value = it},
-                placeholder = { Text(text = "Пароль")},
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Password
-                ),
-                textStyle = TextStyle(
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily.Serif
-                ),
-                maxLines = 1,
-                singleLine = true
-            )
-
-            Button(
-                onClick = {
-                    if (loginValue.value.text == "" || passwordValue.value.text == "") {
-                        Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
-                    } else {
-                        //onLoadResume()
-                        val userInfoAuth = UserInfoAuth(loginValue.value.text,
-                            passwordValue.value.text)
-                        signViewModel.updateAuthUserInfo(userInfoAuth)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
-                Text(
-                    text = "Войти",
-                    style = TextStyle(
-                    fontSize = 16.sp,
+
+                Image(
+                    painter = painterResource(id = R.drawable.img),
+                    contentDescription = "image",
+                    modifier = Modifier.fillMaxHeight(0.5f),
+                    contentScale = ContentScale.Crop
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    value = loginValue.value,
+                    onValueChange = {loginValue.value = it},
+                    placeholder = { Text(text = "Логин")},
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                    ),
+                    maxLines = 1,
+                    singleLine = true,
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    value = passwordValue.value,
+                    onValueChange = {passwordValue.value = it},
+                    placeholder = { Text(text = "Пароль")},
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Password
+                    ),
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                    ),
+                    maxLines = 1,
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation()
+                )
+
+                Button(
+                    onClick = {
+                        if (loginValue.value.text == "" || passwordValue.value.text == "") {
+                            Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
+                        } else {
+                            signViewModel.loading.value = true
+                            val userInfoAuth = UserInfoAuth(loginValue.value.text,
+                                passwordValue.value.text)
+                            signViewModel.updateAuthUserInfo(userInfoAuth)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                ) {
+                    Text(
+                        text = "Войти",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                        )
                     )
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable {
-                    callbacks?.onRegPressed()
                 }
+
+                Box(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clickable {
+                            callbacks?.onRegPressed()
+                        }
+                ) {
+                    Text(
+                        text = "Зарегистрироваться",
+                    )
+                }
+            }
+        }
+
+        Loader(isLoad = loading.value!!)
+    }
+
+    @Composable
+    private fun Loader(isLoad: Boolean) {
+        if (isLoad) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Зарегистрироваться",
-                )
+                CircularProgressIndicator()
             }
         }
     }

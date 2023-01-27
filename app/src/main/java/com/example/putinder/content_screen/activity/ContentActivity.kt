@@ -65,7 +65,8 @@ class ContentActivity :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId) {
-            R.id.add_icon -> routeToAddPlaceFragment()
+//            R.id.add_icon -> routeToAddPlaceFragment()
+            R.id.add_icon -> onFabPressed()
         }
 
         return true

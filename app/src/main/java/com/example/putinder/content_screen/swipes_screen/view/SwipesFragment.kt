@@ -2,9 +2,7 @@ package com.example.putinder.content_screen.swipes_screen.view
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.TextView
@@ -118,13 +116,13 @@ class SwipesFragment : Fragment(), CardStackListener {
 
             pageIndicator.numberOfIndicators = placeInfo.uri.size
 
-            swipesViewModel?.place = placeInfo
-
             fab.setOnClickListener {
+                swipesViewModel?.place = placeInfo
                 callbacks?.onFabPressed()
             }
 
             titleTextView.setOnClickListener {
+                swipesViewModel?.place = placeInfo
                 callbacks?.onOpenCardButtonPressed(image)
             }
 

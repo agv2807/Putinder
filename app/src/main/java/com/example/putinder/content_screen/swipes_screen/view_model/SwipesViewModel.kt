@@ -32,7 +32,7 @@ class SwipesViewModel : ViewModel() {
                         response.images.forEach { id ->
                             storageRef.child("images/${id}").downloadUrl.addOnSuccessListener { uri ->
                                 response.uri.add(uri)
-                                places.value = listPlaceResponse
+                                places.value = listPlaceResponse!!
                             }.addOnFailureListener {
                                 Log.d("TAG", "Error load photo")
                             }

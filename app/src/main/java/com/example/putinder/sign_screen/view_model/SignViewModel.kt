@@ -21,6 +21,7 @@ class SignViewModel : ViewModel() {
     val userInfoLiveData = MutableLiveData<UserResponse>()
     val userPhotoLiveData = MutableLiveData<Uri>()
     val photoIdLiveData = MutableLiveData<String>("")
+    val loading = MutableLiveData(false)
 
     private val apiService = RestApiService()
 
