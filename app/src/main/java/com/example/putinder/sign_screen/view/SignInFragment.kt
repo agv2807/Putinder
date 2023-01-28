@@ -92,6 +92,7 @@ class SignInFragment : Fragment() {
                     QueryPreferences.setStoredQuery(requireContext(), it.token, it.user.id)
                     val intent = ContentActivity.newIntent(requireContext())
                     startActivity(intent)
+                    requireActivity().overridePendingTransition(R.transition.fade_in, R.transition.fade_out)
                 }
             }
         )

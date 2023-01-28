@@ -1,13 +1,14 @@
 package com.example.putinder.sign_screen.view
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,8 +18,6 @@ import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfo
 import com.example.putinder.sign_screen.view_model.SignViewModel
-
-private const val REQUEST_CODE = 3
 
 class SignUpFragment : Fragment() {
 
@@ -38,6 +37,8 @@ class SignUpFragment : Fragment() {
 
     private var photoId = ""
 
+    private lateinit var getContent: ActivityResultLauncher<String>
+
     private val signViewModel: SignViewModel by lazy {
         ViewModelProvider(this)[SignViewModel::class.java]
     }
@@ -47,6 +48,13 @@ class SignUpFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
+
+        getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+                uri: Uri? ->
+            if (uri != null) {
+                signViewModel.uploadPhoto(uri)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -94,9 +102,7 @@ class SignUpFragment : Fragment() {
         }
 
         addPhotoImageView.setOnClickListener {
-           val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_CODE)
+            getContent.launch("image/*")
         }
     }
 
@@ -135,15 +141,6 @@ class SignUpFragment : Fragment() {
                 photoId = it
             }
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            if (data?.data != null) {
-                signViewModel.uploadPhoto(data.data!!)
-            }
-        }
     }
 
     private fun onLoadResume() {

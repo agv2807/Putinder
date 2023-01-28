@@ -1,5 +1,6 @@
 package com.example.putinder.content_screen.map_screen
 
+import android.annotation.SuppressLint
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -41,7 +42,6 @@ class MapFragment : Fragment() {
 
     private val inputListener = object : InputListener {
         override fun onMapTap(p0: Map, p1: Point) {
-            Log.d("MapFragment", "Location lat:${p1.latitude}, lon:${p1.longitude}")
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
             val address = geocoder.getFromLocation(p1.latitude, p1.longitude, 1)
             showAddressInfo(address?.get(0))
@@ -80,17 +80,17 @@ class MapFragment : Fragment() {
         placeInfo = swipesViewModel?.place
 
         mapView.map.move(
-            CameraPosition(Point(placeInfo!!.lat.toDouble(), placeInfo!!.lon.toDouble()),
-                15.0f, 0.0f, 0.0f),
-           // CameraPosition(Point(59.5619, 30.1850), 15.0f, 0.0f, 0.0f),
-            Animation(Animation.Type.SMOOTH, 0.toFloat()),
-            null
-        )
+            CameraPosition(
+                Point(placeInfo!!.lat.toDouble(), placeInfo!!.lon.toDouble()), 5.0f, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, 0.toFloat()),
+                null
+            )
+
         val mapPoint = Point(placeInfo!!.lat.toDouble(), placeInfo!!.lon.toDouble())
-        //val mapPoint = Point(59.5619, 30.1850)
         val viewPoint = View(requireContext()).apply {
             background = ContextCompat.getDrawable(context, R.drawable.ic_baseline_location_on_24)
         }
+
         mapView.map.mapObjects.addPlacemark(mapPoint, ViewProvider(viewPoint))
 
         mapViewModel?.address?.observe(
@@ -115,12 +115,13 @@ class MapFragment : Fragment() {
         super.onStop()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showAddressInfo(address: Address?) {
         if (address?.subLocality != null) {
             addressInfoContainer.visibility = View.VISIBLE
-            addressTextView.text = "${address?.thoroughfare}, ${address?.subThoroughfare}"
-            cityTextView.text = "${address?.subLocality}, ${address?.subAdminArea}, ${address?.countryName}"
-            coordsTextView.text = "Координаты: ${address?.longitude}, ${address?.latitude}"
+            addressTextView.text = "${address.thoroughfare}, ${address.subThoroughfare}"
+            cityTextView.text = "${address.subLocality}, ${address.subAdminArea}, ${address.countryName}"
+            coordsTextView.text = "Координаты: ${address.longitude}, ${address.latitude}"
         }
     }
 

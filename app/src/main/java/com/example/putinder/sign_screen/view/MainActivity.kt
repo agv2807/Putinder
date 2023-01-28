@@ -1,5 +1,7 @@
 package com.example.putinder.sign_screen.view
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.LiveData
@@ -10,11 +12,7 @@ import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.view_model.SignViewModel
 
-class MainActivity : AppCompatActivity(), SignUpComposeFragment.Callbacks, SignInComposeFragment.Callbacks {
-
-    private val signViewModel: SignViewModel by lazy {
-        ViewModelProvider(this)[SignViewModel::class.java]
-    }
+class MainActivity : AppCompatActivity(), SignUpFragment.Callbacks, SignInFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,23 +21,15 @@ class MainActivity : AppCompatActivity(), SignUpComposeFragment.Callbacks, SignI
         val currentFragment = supportFragmentManager.findFragmentById(R.id.main_container)
 
         if (currentFragment == null) {
-            val fragment = SignInComposeFragment.newInstance()
+            val fragment = SignInFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.main_container, fragment)
                 .commit()
         }
-
-        val token = QueryPreferences.getStoredToken(this)
-        signViewModel.checkToken(token) {
-            if (it) {
-                val intent = ContentActivity.newIntent(this)
-                startActivity(intent)
-            }
-        }
     }
 
     override fun onAuthPressed() {
-        val fragment = SignInComposeFragment.newInstance()
+        val fragment = SignInFragment.newInstance()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.main_container, fragment)
@@ -47,11 +37,17 @@ class MainActivity : AppCompatActivity(), SignUpComposeFragment.Callbacks, SignI
     }
 
     override fun onRegPressed() {
-        val fragment = SignUpComposeFragment.newInstance()
+        val fragment = SignUpFragment.newInstance()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.main_container, fragment)
             .commit()
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
     }
 
 }

@@ -102,13 +102,6 @@ class SignUpComposeFragment : Fragment() {
                 }
             }
         )
-
-//        signViewModel.photoIdLiveData.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                photoId = it
-//            }
-//        )
     }
 
     @Composable
