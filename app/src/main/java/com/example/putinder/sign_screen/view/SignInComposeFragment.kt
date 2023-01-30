@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -34,12 +33,11 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfoAuth
 import com.example.putinder.sign_screen.view_model.SignViewModel
-import kotlin.math.sign
 
 class SignInComposeFragment : Fragment() {
 

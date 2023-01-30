@@ -2,11 +2,9 @@ package com.example.putinder.application
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.view.MainActivity

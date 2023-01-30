@@ -13,12 +13,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfoAuth
 import com.example.putinder.sign_screen.view_model.SignViewModel
-import org.w3c.dom.Text
 
 class SignInFragment : Fragment() {
 
@@ -93,6 +92,7 @@ class SignInFragment : Fragment() {
                     val intent = ContentActivity.newIntent(requireContext())
                     startActivity(intent)
                     requireActivity().overridePendingTransition(R.transition.fade_in, R.transition.fade_out)
+                    requireActivity().finish()
                 }
             }
         )

@@ -1,4 +1,4 @@
-package com.example.putinder.QueryPreferences
+package com.example.putinder.query_preferences
 
 import android.content.Context
 import androidx.preference.PreferenceManager

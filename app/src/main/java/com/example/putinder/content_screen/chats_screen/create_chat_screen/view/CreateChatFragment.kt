@@ -15,7 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.chats_screen.chat_screen.view.ChatActivity
 import com.example.putinder.content_screen.chats_screen.create_chat_screen.view_model.CreateChatViewModel
@@ -23,7 +24,7 @@ import com.example.putinder.content_screen.profile_screen.models.ProfileResponse
 
 class CreateChatFragment : Fragment() {
 
-    interface Callbacks{
+    interface Callbacks {
         fun onNewChatCreated()
     }
 
@@ -42,7 +43,7 @@ class CreateChatFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callbacks = context as Callbacks
+        callbacks = context as Callbacks?
     }
 
     override fun onCreateView(
@@ -106,6 +107,7 @@ class CreateChatFragment : Fragment() {
                 Glide
                     .with(this@CreateChatFragment)
                     .load(it)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .centerCrop()
                     .placeholder(R.color.gray)
                     .into(userImageView)
@@ -115,11 +117,11 @@ class CreateChatFragment : Fragment() {
 
         override fun onClick(p0: View?) {
             createChatViewModel.createNewChat(token, userId) {
+                callbacks?.onNewChatCreated()
                 val intent = ChatActivity.newIntent(requireContext())
                 intent.putExtra("CHAT_ID", it?.id)
                 intent.putExtra("USER_IMAGE", userImage)
                 intent.putExtra("USER_NAME", userName)
-                callbacks?.onNewChatCreated()
                 startActivity(intent)
             }
         }

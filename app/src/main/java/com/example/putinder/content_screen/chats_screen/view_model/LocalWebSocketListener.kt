@@ -1,14 +1,14 @@
-package com.example.putinder.content_screen.chats_screen.chat_screen.view_model
+package com.example.putinder.content_screen.chats_screen.view_model
 
 import android.util.Log
-import com.example.putinder.content_screen.chats_screen.chat_screen.models.MessageResponse
+import com.example.putinder.content_screen.chats_screen.models.LastMessage
 import com.example.putinder.content_screen.profile_screen.models.ProfileResponse
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import org.json.JSONObject
 
-class LocalWebSocketListener(private val chatViewModel: ChatViewModel) : WebSocketListener() {
+class LocalWebSocketListener(private val chatsViewModel: ChatsViewModel, private val token: String) : WebSocketListener() {
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         super.onOpen(webSocket, response)
@@ -18,8 +18,8 @@ class LocalWebSocketListener(private val chatViewModel: ChatViewModel) : WebSock
     override fun onMessage(webSocket: WebSocket, text: String) {
         outPut("Received $text")
         val jsonMessageResponse = JSONObject(text)
-//        val messageId = jsonMessageResponse.getString("id")
-//        val chatId = jsonMessageResponse.getString("chatId")
+        val messageId = jsonMessageResponse.getString("id")
+        val chatId = jsonMessageResponse.getString("chatId")
         val messageText = jsonMessageResponse.getString("message")
         val messageDate = jsonMessageResponse.getString("date")
         val userInfo = jsonMessageResponse.getJSONObject("user")
@@ -29,9 +29,18 @@ class LocalWebSocketListener(private val chatViewModel: ChatViewModel) : WebSock
         val userId = userInfo.getString("id")
         val user = ProfileResponse(userLogin, userId, userImage, userName)
 
-        val messages = chatViewModel.messagesLiveData.value?.toMutableList()
-        messages?.add(MessageResponse(messageText, messageDate, user))
-        chatViewModel.messagesLiveData.postValue(messages)
+//        val messages = chatViewModel.messagesLiveData.value?.toMutableList()
+//        messages?.add(MessageResponse(messageText, messageDate, user))
+//        chatViewModel.messagesLiveData.postValue(messages)
+        val lastMessage = LastMessage(messageDate, messageId, messageText, chatId, user)
+        chatsViewModel.loadChatsList(token)
+        val chats = chatsViewModel.chatsLiveData.value
+        chats?.forEach {
+            if (it.id == lastMessage.chatId) {
+                it.lastMessage = lastMessage
+            }
+        }
+        chatsViewModel.chatsLiveData.postValue(chats)
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {

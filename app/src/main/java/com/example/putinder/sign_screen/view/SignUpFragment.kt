@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfo
@@ -85,7 +85,7 @@ class SignUpFragment : Fragment() {
             if (loginEditText.text.isEmpty() || passwordEditText.text.isEmpty()
                 || nameEditText.text.isEmpty() || confirmPasswordEditText.text.isEmpty()) {
                 Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
-            } else if (passwordEditText.text != confirmPasswordEditText.text){
+            } else if (passwordEditText.text.toString() != confirmPasswordEditText.text.toString()){
                 Toast.makeText(requireContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show()
             } else {
                 onLoadResume()
@@ -119,6 +119,7 @@ class SignUpFragment : Fragment() {
                     val intent = ContentActivity.newIntent(requireContext())
                     QueryPreferences.setStoredQuery(requireContext(), it.token, it.user.id)
                     startActivity(intent)
+                    requireActivity().finish()
                 }
             }
         )

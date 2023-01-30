@@ -1,6 +1,7 @@
 package com.example.putinder.content_screen.map_screen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -29,6 +30,10 @@ import java.util.*
 
 class MapFragment : Fragment() {
 
+    interface Callbacks {
+        fun onMapClosed()
+    }
+
     private lateinit var mapView: MapView
     private lateinit var addressInfoContainer: LinearLayout
     private lateinit var addressTextView: TextView
@@ -39,6 +44,8 @@ class MapFragment : Fragment() {
     private var mapViewModel: MapViewModel? = null
 
     private var placeInfo: PlaceResponse? = null
+
+    private var callbacks: Callbacks? = null
 
     private val inputListener = object : InputListener {
         override fun onMapTap(p0: Map, p1: Point) {
@@ -51,6 +58,11 @@ class MapFragment : Fragment() {
 
         }
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
     }
 
     override fun onCreateView(
@@ -81,7 +93,7 @@ class MapFragment : Fragment() {
 
         mapView.map.move(
             CameraPosition(
-                Point(placeInfo!!.lat.toDouble(), placeInfo!!.lon.toDouble()), 5.0f, 0.0f, 0.0f),
+                Point(placeInfo!!.lat.toDouble(), placeInfo!!.lon.toDouble()), 15.0f, 0.0f, 0.0f),
                 Animation(Animation.Type.SMOOTH, 0.toFloat()),
                 null
             )

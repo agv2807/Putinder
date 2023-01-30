@@ -7,22 +7,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.elyeproj.loaderviewlibrary.LoaderImageView
+import com.elyeproj.loaderviewlibrary.LoaderTextView
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.profile_screen.models.ProfileResponse
 import com.example.putinder.content_screen.profile_screen.view_model.ProfileViewModel
+import com.example.putinder.sign_screen.view.MainActivity
 
 class ProfileFragment : Fragment() {
 
-    private lateinit var profilePhoto: ImageView
-    private lateinit var userNameTextView: TextView
+    private lateinit var profilePhoto: LoaderImageView
+    private lateinit var userNameTextView: LoaderTextView
+    private lateinit var exitButton: ImageView
 
     private val profileViewModel: ProfileViewModel by lazy {
         ViewModelProvider(this)[ProfileViewModel::class.java]
@@ -49,6 +53,7 @@ class ProfileFragment : Fragment() {
 
         profilePhoto = view.findViewById(R.id.photo_profile_image)
         userNameTextView = view.findViewById(R.id.user_name_text_view)
+        exitButton = view.findViewById(R.id.exit_image_view)
 
         val token = QueryPreferences.getStoredToken(requireContext())
         profileViewModel.loadUserInfo(token)
@@ -61,10 +66,19 @@ class ProfileFragment : Fragment() {
 
         profilePhoto.setOnClickListener {
             getContent.launch("image/*")
+            profilePhoto.resetLoader()
+
         }
 
         userNameTextView.setOnClickListener {
             showChangeNameDialog()
+        }
+
+        exitButton.setOnClickListener {
+            val intent = MainActivity.newIntent(requireContext())
+            startActivity(intent)
+            QueryPreferences.setStoredQuery(requireContext(), "", "")
+            requireActivity().finish()
         }
     }
 
@@ -88,8 +102,8 @@ class ProfileFragment : Fragment() {
         Glide
             .with(this)
             .load(uri)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
-            .placeholder(R.color.gray)
             .into(profilePhoto)
     }
 
@@ -102,6 +116,7 @@ class ProfileFragment : Fragment() {
         dialog.onOk = {
             val newName = dialog.editText.text.toString()
             profileViewModel.updateUserName(newName)
+            userNameTextView.resetLoader()
         }
         dialog.show(this@ProfileFragment.requireFragmentManager(), "editDescription")
     }

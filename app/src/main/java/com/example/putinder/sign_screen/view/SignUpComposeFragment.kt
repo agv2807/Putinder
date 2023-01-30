@@ -42,7 +42,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfo

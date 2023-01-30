@@ -4,13 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import com.example.putinder.QueryPreferences.QueryPreferences
 import com.example.putinder.R
-import com.example.putinder.content_screen.activity.ContentActivity
-import com.example.putinder.sign_screen.view_model.SignViewModel
 
 class MainActivity : AppCompatActivity(), SignUpFragment.Callbacks, SignInFragment.Callbacks {
 

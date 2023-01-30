@@ -18,7 +18,6 @@ class CreateChatViewModel : ViewModel() {
     private val storageRef = Firebase.storage.reference
 
     val usersListLiveData = MutableLiveData<List<ProfileResponse>>()
-    val newChatLiveData = MutableLiveData<NewChatResponse>()
 
     fun getUsersList(token: String?) {
         viewModelScope.launch {
@@ -36,7 +35,6 @@ class CreateChatViewModel : ViewModel() {
         viewModelScope.launch {
             apiService.createNewChat(token, userId) {
                 if (it?.id != null) {
-                    newChatLiveData.value = it
                     onResult(it)
                 } else {
                     Log.e("CreateChatViewModel", "Error create new chat")
@@ -52,7 +50,7 @@ class CreateChatViewModel : ViewModel() {
                 onResult(it)
             }.addOnFailureListener {
                 onResult(null)
-                Log.d("ChatsViewModelPhotoLoad", "Error load photo")
+                Log.d("CreateChatsLoadPhoto", "Error load photo")
             }
         }
     }

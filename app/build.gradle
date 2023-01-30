@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId "com.example.putinder"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -129,4 +129,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:1.4.0")
 
     implementation 'me.relex:circleindicator:2.1.6'
+
+    implementation 'io.github.elye:loaderviewlibrary:3.0.0'
 }

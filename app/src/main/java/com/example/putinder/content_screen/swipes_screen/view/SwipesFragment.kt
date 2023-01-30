@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.arindicatorview.ARIndicatorView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.putinder.R
 import com.example.putinder.content_screen.swipes_screen.models.PlaceResponse
 import com.example.putinder.content_screen.swipes_screen.view_model.SwipesViewModel
@@ -28,6 +30,7 @@ class SwipesFragment : Fragment(), CardStackListener {
     private var callbacks: Callbacks? = null
 
     private lateinit var cardStackView: CardStackView
+    private lateinit var loader: ProgressBar
 
     private var swipesViewModel: SwipesViewModel? = null
 
@@ -46,6 +49,7 @@ class SwipesFragment : Fragment(), CardStackListener {
         val view = inflater.inflate(R.layout.fragment_swipes, container, false)
 
         cardStackView = view.findViewById(R.id.card_stack_view)
+        loader = view.findViewById(R.id.loader)
         val layoutManager = CardStackLayoutManager(requireContext(), this).apply {
             setSwipeableMethod(SwipeableMethod.AutomaticAndManual)
             setOverlayInterpolator(LinearInterpolator())
@@ -66,6 +70,7 @@ class SwipesFragment : Fragment(), CardStackListener {
             Observer {
                 adapter = CardStackAdapter(it)
                 cardStackView.adapter = adapter
+                loader.visibility = View.GONE
             }
         )
     }
@@ -133,6 +138,7 @@ class SwipesFragment : Fragment(), CardStackListener {
                     Glide
                         .with(this@SwipesFragment)
                         .load(placeInfo.uri[index])
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerCrop()
                         .placeholder(R.color.gray)
                         .into(image)

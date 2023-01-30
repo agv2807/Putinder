@@ -3,6 +3,7 @@ package com.example.putinder.content_screen.chats_screen.view
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -16,11 +17,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.chats_screen.models.Chat
 import com.example.putinder.content_screen.chats_screen.view_model.ChatsViewModel
 import com.example.putinder.content_screen.chats_screen.chat_screen.view.ChatActivity
+import com.example.putinder.content_screen.chats_screen.create_chat_screen.view.CreateChatFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -48,7 +50,7 @@ class ChatsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callbacks = context as Callbacks
+        callbacks = context as Callbacks?
     }
 
     override fun onCreateView(
@@ -70,6 +72,8 @@ class ChatsFragment : Fragment() {
 
         chatsViewModel.loadChatsList(token)
 
+        chatsViewModel.initWebSocket(token)
+
         return view
     }
 
@@ -78,6 +82,7 @@ class ChatsFragment : Fragment() {
         newChatButton.setOnClickListener {
             callbacks?.onNewChatPressed()
         }
+        chatsViewModel.loadChatsList(token)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -131,10 +136,6 @@ class ChatsFragment : Fragment() {
             }
 
            chatsViewModel.loadImage(userImage) {
-//               if (it != null && it.path != null) {
-//                   val bitmap = getScaledBitmap(it.path.toString(), requireActivity())
-//                   userPhotoImageView.setImageBitmap(bitmap)
-//               }
                updatePhoto(it)
             }
         }
