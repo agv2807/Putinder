@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class SwipesViewModel : ViewModel() {
 
     val places = MutableLiveData<List<PlaceResponse>>()
+    var index = 0
     var place: PlaceResponse? = null
 
     private val apiService = RestApiService()

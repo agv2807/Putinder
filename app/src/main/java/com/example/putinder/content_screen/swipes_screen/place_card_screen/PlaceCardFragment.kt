@@ -1,31 +1,23 @@
 package com.example.putinder.content_screen.swipes_screen.place_card_screen
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
-import com.arindicatorview.ARIndicatorView
 import com.bumptech.glide.Glide
 import com.example.putinder.R
 import com.example.putinder.content_screen.swipes_screen.models.PlaceResponse
 import com.example.putinder.content_screen.swipes_screen.view_model.SwipesViewModel
 import com.google.android.material.transition.MaterialContainerTransform
-import me.relex.circleindicator.CircleIndicator
-import me.relex.circleindicator.CircleIndicator2
 import me.relex.circleindicator.CircleIndicator3
-import java.util.*
 
 class PlaceCardFragment : Fragment() {
 
@@ -75,7 +67,6 @@ class PlaceCardFragment : Fragment() {
             viewPager.adapter = viewPagerAdapter
             viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
             indicator.setViewPager(viewPager)
-//            viewPagerAdapter.registerAdapterDataObserver(indicator.adapterDataObserver)
 
             placeTitleTextView.text = placeInfo.title
             categoriesTextView.text = placeInfo.description

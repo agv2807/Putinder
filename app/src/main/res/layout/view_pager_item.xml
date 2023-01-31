@@ -6,7 +6,6 @@
 
     <ImageView
         android:id="@+id/item_image"
-        android:transitionName="shared_element_container"
         tools:background="@color/gray"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

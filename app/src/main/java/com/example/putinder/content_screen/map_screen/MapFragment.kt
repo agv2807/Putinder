@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -50,8 +52,21 @@ class MapFragment : Fragment() {
     private val inputListener = object : InputListener {
         override fun onMapTap(p0: Map, p1: Point) {
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            val address = geocoder.getFromLocation(p1.latitude, p1.longitude, 1)
-            showAddressInfo(address?.get(0))
+            if (Build.VERSION.SDK_INT >= 33) {
+                geocoder.getFromLocation(p1.latitude, p1.longitude, 1
+                ) {
+                    showAddressInfo(it[0])
+                }
+            } else {
+                try {
+                    val address = geocoder.getFromLocation(p1.latitude, p1.longitude, 1)
+                    showAddressInfo(address?.get(0))
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
         }
 
         override fun onMapLongTap(p0: Map, p1: Point) {

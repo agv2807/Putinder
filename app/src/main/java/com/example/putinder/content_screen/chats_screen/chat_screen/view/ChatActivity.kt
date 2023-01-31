@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -29,6 +30,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var messagesListRecyclerView: RecyclerView
     private lateinit var messageEditText: EditText
     private lateinit var sendMessageButton: FloatingActionButton
+    private lateinit var loader: ProgressBar
 
     private var adapter = ChatAdapter(emptyList())
 
@@ -47,6 +49,7 @@ class ChatActivity : AppCompatActivity() {
         messagesListRecyclerView = findViewById(R.id.messages_list_recycler_view)
         messageEditText = findViewById(R.id.message_edit_text)
         sendMessageButton = findViewById(R.id.send_message_button)
+        loader = findViewById(R.id.loader)
 
         val token = QueryPreferences.getStoredToken(this)
         id = QueryPreferences.getStoredId(this)
@@ -70,6 +73,7 @@ class ChatActivity : AppCompatActivity() {
                 adapter = ChatAdapter(it)
                 messagesListRecyclerView.adapter = adapter
                 messagesListRecyclerView.scrollToPosition(it.size - 1)
+                loader.visibility = View.GONE
             }
         )
 

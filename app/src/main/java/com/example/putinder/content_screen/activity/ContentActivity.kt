@@ -32,7 +32,7 @@ class ContentActivity :
     private val swipesFragment = SwipesFragment.newInstance()
     private val profileFragment = ProfileFragment.newInstance()
     private var createChatFragment = CreateChatFragment.newInstance()
-    private val placeCardFragment = PlaceCardFragment.newInstance()
+    private var placeCardFragment = PlaceCardFragment.newInstance()
     private val mapFragment = MapFragment.newInstance()
     private var activeFragment: Fragment = profileFragment
 
@@ -94,6 +94,7 @@ class ContentActivity :
                 when(activeFragment) {
                     createChatFragment -> deleteCreateChatFragment()
                     mapFragment -> deleteMapFragment()
+                    placeCardFragment -> deletePlaceCardFragment()
                     else -> finish()
                 }
             }
@@ -152,13 +153,24 @@ class ContentActivity :
     }
 
     private fun routeToPlaceCardFragment(view: View) {
+        placeCardFragment = PlaceCardFragment.newInstance()
         placeCardFragment.sharedElementEnterTransition = MaterialContainerTransform()
+        bottomMenu.visibility = View.GONE
         supportFragmentManager.beginTransaction()
             .addSharedElement(view, "shared_element_container")
             .add(R.id.container, placeCardFragment)
             .hide(activeFragment)
             .commit()
         activeFragment = placeCardFragment
+    }
+
+    private fun deletePlaceCardFragment() {
+        bottomMenu.visibility = View.VISIBLE
+        activeFragment = swipesFragment
+        supportFragmentManager.beginTransaction()
+            .remove(placeCardFragment)
+            .show(activeFragment)
+            .commit()
     }
 
     private fun routeToAddPlaceFragment() {

@@ -3,13 +3,13 @@ package com.example.putinder.content_screen.chats_screen.view
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,7 +22,6 @@ import com.example.putinder.R
 import com.example.putinder.content_screen.chats_screen.models.Chat
 import com.example.putinder.content_screen.chats_screen.view_model.ChatsViewModel
 import com.example.putinder.content_screen.chats_screen.chat_screen.view.ChatActivity
-import com.example.putinder.content_screen.chats_screen.create_chat_screen.view.CreateChatFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,6 +35,7 @@ class ChatsFragment : Fragment() {
     private lateinit var searchEditText: EditText
     private lateinit var chatsRecyclerView: RecyclerView
     private lateinit var newChatButton: FloatingActionButton
+    private lateinit var loader: ProgressBar
 
     private var adapter: ChatsAdapter? = ChatsAdapter(emptyList())
 
@@ -63,6 +63,7 @@ class ChatsFragment : Fragment() {
         searchEditText = view.findViewById(R.id.search_edit_text)
         chatsRecyclerView = view.findViewById(R.id.chat_recycler_view)
         newChatButton = view.findViewById(R.id.new_chat_button)
+        loader = view.findViewById(R.id.loader)
 
         chatsRecyclerView.layoutManager = LinearLayoutManager(context)
         chatsRecyclerView.adapter = adapter
@@ -77,14 +78,6 @@ class ChatsFragment : Fragment() {
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        newChatButton.setOnClickListener {
-            callbacks?.onNewChatPressed()
-        }
-        chatsViewModel.loadChatsList(token)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatsViewModel.chatsLiveData.observe(
@@ -92,8 +85,17 @@ class ChatsFragment : Fragment() {
             Observer {
                 adapter = ChatsAdapter(it)
                 chatsRecyclerView.adapter = adapter
+                loader.visibility = View.GONE
             }
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        newChatButton.setOnClickListener {
+            callbacks?.onNewChatPressed()
+        }
+        chatsViewModel.loadChatsList(token)
     }
 
     companion object {

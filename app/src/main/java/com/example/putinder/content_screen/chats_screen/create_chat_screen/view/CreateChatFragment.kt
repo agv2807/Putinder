@@ -8,6 +8,7 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,6 +31,7 @@ class CreateChatFragment : Fragment() {
 
     private lateinit var searchUserEditText: EditText
     private lateinit var usersListRecyclerView: RecyclerView
+    private lateinit var loader: ProgressBar
 
     private val createChatViewModel: CreateChatViewModel by lazy {
         ViewModelProvider(this)[CreateChatViewModel::class.java]
@@ -55,6 +57,7 @@ class CreateChatFragment : Fragment() {
 
         searchUserEditText = view.findViewById(R.id.search_user_edit_text)
         usersListRecyclerView = view.findViewById(R.id.users_list_recycler_view)
+        loader = view.findViewById(R.id.loader)
 
         token = QueryPreferences.getStoredToken(requireContext())
 
@@ -74,6 +77,7 @@ class CreateChatFragment : Fragment() {
             Observer {
                 adapter = UsersListAdapter(it)
                 usersListRecyclerView.adapter = adapter
+                loader.visibility = View.GONE
             }
         )
     }
@@ -104,13 +108,15 @@ class CreateChatFragment : Fragment() {
             userImage = profileResponse.image
 
             createChatViewModel.loadImage(profileResponse.image) {
-                Glide
-                    .with(this@CreateChatFragment)
-                    .load(it)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .centerCrop()
-                    .placeholder(R.color.gray)
-                    .into(userImageView)
+                if (isAdded) {
+                    Glide
+                        .with(this@CreateChatFragment)
+                        .load(it)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .centerCrop()
+                        .placeholder(R.color.gray)
+                        .into(userImageView)
+                }
             }
 
         }

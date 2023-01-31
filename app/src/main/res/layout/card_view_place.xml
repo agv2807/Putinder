@@ -4,19 +4,17 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="2dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginBottom="8dp"
     android:orientation="vertical"
     android:background="@color/white"
     android:elevation="12dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:gravity="center"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/image"
@@ -50,9 +48,18 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="38dp"
+            android:background="@drawable/card_gradient" />
+
             <LinearLayout
-                android:orientation="horizontal"
+                android:id="@+id/lin"
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="60dp"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -99,6 +106,32 @@
 
         </RelativeLayout>
 
-    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/left_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/overlay_black">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/skip_white_120dp"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/right_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/overlay_black">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/like_white_120dp"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
 
 </androidx.cardview.widget.CardView>
