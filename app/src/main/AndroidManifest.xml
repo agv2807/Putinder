@@ -27,7 +27,8 @@
         </activity>
 
         <activity
-            android:name=".sign_screen.view.MainActivity">
+            android:name=".sign_screen.view.MainActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         </activity>
 
         <activity

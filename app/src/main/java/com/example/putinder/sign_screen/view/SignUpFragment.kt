@@ -21,40 +21,18 @@ import com.example.putinder.sign_screen.view_model.SignViewModel
 
 class SignUpFragment : Fragment() {
 
-    interface Callbacks {
-        fun onAuthPressed()
-    }
-
     private lateinit var loginEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var nameEditText: EditText
     private lateinit var confirmPasswordEditText: EditText
     private lateinit var signButton: Button
-    private lateinit var authTextView: TextView
-    private lateinit var addPhotoImageView: ImageView
-    private lateinit var photoImageView: ImageView
     private lateinit var loader: ProgressBar
+    private lateinit var containerLayout: RelativeLayout
 
     private var photoId = ""
 
-    private lateinit var getContent: ActivityResultLauncher<String>
-
     private val signViewModel: SignViewModel by lazy {
         ViewModelProvider(this)[SignViewModel::class.java]
-    }
-
-    private var callbacks: Callbacks? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
-
-        getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
-                uri: Uri? ->
-            if (uri != null) {
-                signViewModel.uploadPhoto(uri)
-            }
-        }
     }
 
     override fun onCreateView(
@@ -70,10 +48,8 @@ class SignUpFragment : Fragment() {
         signButton = view.findViewById(R.id.sign_button)
         nameEditText = view.findViewById(R.id.name_edit_text)
         confirmPasswordEditText = view.findViewById(R.id.confirm_password_edit_text)
-        authTextView = view.findViewById(R.id.auth_text_view)
-        addPhotoImageView = view.findViewById(R.id.user_photo_image_view)
-        photoImageView = view.findViewById(R.id.photo_image_view)
         loader = view.findViewById(R.id.loader)
+        containerLayout = view.findViewById(R.id.container)
 
         return view
     }
@@ -96,14 +72,6 @@ class SignUpFragment : Fragment() {
                 signViewModel.updateUserInfo(userInfo)
             }
         }
-
-        authTextView.setOnClickListener {
-            callbacks?.onAuthPressed()
-        }
-
-        addPhotoImageView.setOnClickListener {
-            getContent.launch("image/*")
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -123,48 +91,16 @@ class SignUpFragment : Fragment() {
                 }
             }
         )
-
-        signViewModel.userPhotoLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                Glide
-                    .with(this)
-                    .load(it)
-                    .centerCrop()
-                    .placeholder(R.color.gray)
-                    .into(photoImageView)
-            }
-        )
-
-        signViewModel.photoIdLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                photoId = it
-            }
-        )
     }
 
     private fun onLoadResume() {
         loader.visibility = View.VISIBLE
-        loginEditText.visibility = View.GONE
-        passwordEditText.visibility = View.GONE
-        signButton.visibility = View.GONE
-        nameEditText.visibility = View.GONE
-        confirmPasswordEditText.visibility = View.GONE
-        authTextView.visibility = View.GONE
-        addPhotoImageView.visibility = View.GONE
-
+        containerLayout.visibility = View.GONE
     }
 
     private fun onLoadFinish() {
         loader.visibility = View.GONE
-        loginEditText.visibility = View.VISIBLE
-        passwordEditText.visibility = View.VISIBLE
-        signButton.visibility = View.VISIBLE
-        nameEditText.visibility = View.VISIBLE
-        confirmPasswordEditText.visibility = View.VISIBLE
-        authTextView.visibility = View.VISIBLE
-        addPhotoImageView.visibility = View.VISIBLE
+        containerLayout.visibility = View.VISIBLE
     }
 
     companion object {

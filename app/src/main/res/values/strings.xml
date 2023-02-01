@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Putinder</string>
-    <string name="sign_in">Войти</string>
+    <string name="sign_in">ВОЙТИ</string>
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
     <string name="name">Имя</string>
@@ -12,4 +12,6 @@
     <string name="new_chat">Новый чат</string>
     <string name="description">Описание</string>
     <string name="reviews">Отзывы</string>
+    <string name="authorization">Авторизация</string>
+    <string name="registration">Регистрация</string>
 </resources>

@@ -69,7 +69,7 @@ class SignUpComposeFragment : Fragment() {
         getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
                 uri: Uri? ->
             if (uri != null) {
-                signViewModel.uploadPhoto(uri)
+               // signViewModel.uploadPhoto(uri)
             }
         }
     }
@@ -112,7 +112,7 @@ class SignUpComposeFragment : Fragment() {
         var confirmPasswordValue = remember { mutableStateOf(TextFieldValue()) }
         val loading = signViewModel.loading.observeAsState()
 
-        val photoId = signViewModel.photoIdLiveData.observeAsState()
+        //val photoId = signViewModel.photoIdLiveData.observeAsState()
 
         Box(modifier = Modifier.fillMaxSize(),) {
             Column(
@@ -155,8 +155,9 @@ class SignUpComposeFragment : Fragment() {
                             signViewModel.loading.value = true
                             val userInfo = UserInfo(loginValue.value.text,
                                 passwordValue.value.text,
-                                nameValue.value.text,
-                                photoId.value!!)
+                                nameValue.value.text
+                                //photoId.value!!
+                                )
                             signViewModel.updateUserInfo(userInfo)
                         }
                     },
@@ -259,18 +260,18 @@ class SignUpComposeFragment : Fragment() {
 
     @Composable
     private fun UserImage() {
-        val uri = signViewModel.userPhotoLiveData.observeAsState()
-        val painter = loadPicture(
-            uri = uri.value,
-            placeholder = painterResource(id = R.drawable.img)
-        )
-        if (painter != null) {
-            Image(
-                painter = painter,
-                contentDescription = "image",
-                modifier = Modifier.fillMaxHeight(0.3f)
-            )
-        }
+//        val uri = signViewModel.userPhotoLiveData.observeAsState()
+//        val painter = loadPicture(
+//            uri = uri.value,
+//            placeholder = painterResource(id = R.drawable.img)
+//        )
+//        if (painter != null) {
+//            Image(
+//                painter = painter,
+//                contentDescription = "image",
+//                modifier = Modifier.fillMaxHeight(0.3f)
+//            )
+//        }
     }
 
     @Composable
