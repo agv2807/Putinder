@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:elevation="2dp"
     android:layout_margin="4dp"
-    android:background="@color/white"
+    android:background="@drawable/round_corners_background"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -19,14 +19,14 @@
             app:cardCornerRadius="100dp"
             android:layout_margin="16dp"
             android:layout_gravity="center_vertical"
-            android:layout_width="50dp"
-            android:layout_height="50dp">
+            android:layout_width="70dp"
+            android:layout_height="70dp">
 
             <ImageView
                 android:id="@+id/user_photo_message"
                 android:scaleType="centerCrop"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </androidx.cardview.widget.CardView>
 

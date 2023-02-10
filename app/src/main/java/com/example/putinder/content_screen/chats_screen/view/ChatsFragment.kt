@@ -22,6 +22,7 @@ import com.example.putinder.R
 import com.example.putinder.content_screen.chats_screen.models.Chat
 import com.example.putinder.content_screen.chats_screen.view_model.ChatsViewModel
 import com.example.putinder.content_screen.chats_screen.chat_screen.view.ChatActivity
+import com.factor.bouncy.BouncyRecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -33,7 +34,7 @@ class ChatsFragment : Fragment() {
     }
 
     private lateinit var searchEditText: EditText
-    private lateinit var chatsRecyclerView: RecyclerView
+    private lateinit var chatsRecyclerView: BouncyRecyclerView
     private lateinit var newChatButton: FloatingActionButton
     private lateinit var loader: ProgressBar
 

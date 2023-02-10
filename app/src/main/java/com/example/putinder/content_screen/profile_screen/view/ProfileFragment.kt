@@ -26,7 +26,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profilePhoto: LoaderImageView
     private lateinit var userNameTextView: LoaderTextView
-    private lateinit var exitButton: ImageView
 
     private val profileViewModel: ProfileViewModel by lazy {
         ViewModelProvider(this)[ProfileViewModel::class.java]
@@ -53,7 +52,6 @@ class ProfileFragment : Fragment() {
 
         profilePhoto = view.findViewById(R.id.photo_profile_image)
         userNameTextView = view.findViewById(R.id.user_name_text_view)
-        exitButton = view.findViewById(R.id.exit_image_view)
 
         val token = QueryPreferences.getStoredToken(requireContext())
         profileViewModel.loadUserInfo(token)
@@ -72,13 +70,6 @@ class ProfileFragment : Fragment() {
 
         userNameTextView.setOnClickListener {
             showChangeNameDialog()
-        }
-
-        exitButton.setOnClickListener {
-            val intent = MainActivity.newIntent(requireContext())
-            startActivity(intent)
-            QueryPreferences.setStoredQuery(requireContext(), "", "")
-            requireActivity().finish()
         }
     }
 

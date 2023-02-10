@@ -80,8 +80,7 @@ class ContentActivity :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId) {
-//            R.id.add_icon -> routeToAddPlaceFragment()
-            //R.id.add_icon -> onNewChatPressed()
+            R.id.exit_icon -> exitFromAcc()
         }
 
         return true
@@ -173,10 +172,6 @@ class ContentActivity :
             .commit()
     }
 
-    private fun routeToAddPlaceFragment() {
-
-    }
-
     private fun deleteMapFragment() {
         bottomMenu.visibility = View.VISIBLE
         activeFragment = swipesFragment
@@ -196,7 +191,12 @@ class ContentActivity :
         activeFragment = mapFragment
     }
 
-
+    private fun exitFromAcc() {
+        val intent = MainActivity.newIntent(this)
+        startActivity(intent)
+        QueryPreferences.setStoredQuery(this, "", "")
+        finish()
+    }
 
     override fun onOpenCardButtonPressed(view: View) {
         routeToPlaceCardFragment(view)

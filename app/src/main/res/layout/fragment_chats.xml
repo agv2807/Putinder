@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.factor.bouncy.BouncyRecyclerView
                 android:id="@+id/chat_recycler_view"
                 android:layout_marginHorizontal="14dp"
                 android:orientation="vertical"
