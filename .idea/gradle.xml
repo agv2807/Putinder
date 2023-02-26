@@ -12,6 +12,19 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/data" />
+            <option value="$PROJECT_DIR$/core/model" />
+            <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/core/ui" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/content_screen" />
+            <option value="$PROJECT_DIR$/feature/content_screen/chat_screen" />
+            <option value="$PROJECT_DIR$/feature/content_screen/chats" />
+            <option value="$PROJECT_DIR$/feature/content_screen/create_chat" />
+            <option value="$PROJECT_DIR$/feature/content_screen/profile" />
+            <option value="$PROJECT_DIR$/feature/content_screen/swipes" />
+            <option value="$PROJECT_DIR$/feature/sign_screen" />
           </set>
         </option>
       </GradleProjectSettings>

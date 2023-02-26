@@ -27,12 +27,12 @@
         </activity>
 
         <activity
-            android:name=".sign_screen.view.MainActivity"
+            android:name="com.example.sign_screen.view.MainActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         </activity>
 
         <activity
-            android:name=".content_screen.activity.ContentActivity"
+            android:name="com.example.content_screen.ContentActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name=".content_screen.chats_screen.chat_screen.view.ChatActivity"
+            android:name="com.example.chat_screen.view.ChatActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />

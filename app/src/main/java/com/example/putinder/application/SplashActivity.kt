@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
-import com.example.putinder.content_screen.activity.ContentActivity
-import com.example.putinder.sign_screen.view.MainActivity
-import com.example.putinder.sign_screen.view_model.SignViewModel
+import com.example.content_screen.ContentActivity
 
 @SuppressLint("CustomSplashScreen")
 @Suppress ( "DEPRECATION" )
 class SplashActivity : AppCompatActivity() {
 
-    private val signViewModel: SignViewModel by lazy {
-        ViewModelProvider(this)[SignViewModel::class.java]
+    private val signViewModel: com.example.sign_screen.view_model.SignViewModel by lazy {
+        ViewModelProvider(this)[com.example.sign_screen.view_model.SignViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
                 overridePendingTransition(R.transition.fade_in, R.transition.fade_out)
                 finish()
             } else {
-                val intent = MainActivity.newIntent(this)
+                val intent = com.example.sign_screen.view.MainActivity.newIntent(this)
                 startActivity(intent)
                 overridePendingTransition(R.transition.fade_in, R.transition.fade_out)
                 finish()

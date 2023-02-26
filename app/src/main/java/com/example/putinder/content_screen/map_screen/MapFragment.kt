@@ -6,7 +6,6 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +14,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.putinder.R
-import com.example.putinder.content_screen.swipes_screen.models.PlaceResponse
-import com.example.putinder.content_screen.swipes_screen.view_model.SwipesViewModel
+import com.example.model.place.PlaceResponse
+import com.example.swipes.view_model.SwipesViewModel
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -42,10 +40,9 @@ class MapFragment : Fragment() {
     private lateinit var cityTextView: TextView
     private lateinit var coordsTextView: TextView
 
-    private var swipesViewModel: SwipesViewModel? = null
-    private var mapViewModel: MapViewModel? = null
+    private var swipesViewModel: com.example.swipes.view_model.SwipesViewModel? = null
 
-    private var placeInfo: PlaceResponse? = null
+    private var placeInfo: com.example.model.place.PlaceResponse? = null
 
     private var callbacks: Callbacks? = null
 
@@ -101,8 +98,7 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        swipesViewModel = ViewModelProvider(requireActivity())[SwipesViewModel::class.java]
-        mapViewModel = ViewModelProvider(requireActivity())[MapViewModel::class.java]
+        swipesViewModel = ViewModelProvider(requireActivity())[com.example.swipes.view_model.SwipesViewModel::class.java]
 
         placeInfo = swipesViewModel?.place
 
@@ -119,13 +115,6 @@ class MapFragment : Fragment() {
         }
 
         mapView.map.mapObjects.addPlacemark(mapPoint, ViewProvider(viewPoint))
-
-        mapViewModel?.address?.observe(
-            viewLifecycleOwner,
-            Observer {
-                Log.d("MapFragment", it.country + it.city + it.street + it.house)
-            }
-        )
     }
 
     override fun onStart() {

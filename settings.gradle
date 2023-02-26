@@ -18,3 +18,16 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Putinder"
 include ':app'
+include ':core:data'
+include ':core:model'
+include ':core:network'
+include ':feature'
+include ':feature:sign_screen'
+include ':core:ui'
+include ':feature:content_screen'
+include ':feature:content_screen:profile'
+include ':feature:content_screen:swipes'
+include ':feature:content_screen:chats'
+include ':feature:content_screen:chat_screen'
+include ':feature:content_screen:create_chat'
+include ':core2'
