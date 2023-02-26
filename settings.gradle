@@ -1,33 +1,33 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
         maven {
             url "https://jitpack.io"
         }
+        gradlePluginPortal()
+        google()
+        mavenCentral()
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven { url "https://jitpack.io" }
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
     }
 }
 rootProject.name = "Putinder"
 include ':app'
-include ':core2:data'
-include ':core2:model'
-include ':core2:network'
-include ':feature'
+
+include ':core:data'
+include ':core:model'
+include ':core:network'
+include ':core:ui'
+
 include ':feature:sign_screen'
-include ':core2:ui'
-include ':feature:content_screen'
-include ':feature:content_screen:profile'
-include ':feature:content_screen:swipes'
-include ':feature:content_screen:chats'
-include ':feature:content_screen:chat_screen'
-include ':feature:content_screen:create_chat'
-include ':core2'
+include ':feature:chat_screen'
+include ':feature:profile'
+include ':feature:swipes'
+include ':feature:chats'
+include ':feature:create_chat'
+include ':feature:yandex_map'

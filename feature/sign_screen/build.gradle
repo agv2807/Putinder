@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -41,7 +42,10 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
-    api project(":core2:data")
-    api project(":core2:model")
-    api project(":core2:ui")
+    implementation 'com.google.dagger:dagger:2.44.2'
+    kapt 'com.google.dagger:dagger-compiler:2.44.2'
+
+    api project(":core:data")
+    api project(":core:model")
+    api project(":core:ui")
 }

@@ -8,12 +8,13 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.data.query_preferences.QueryPreferences
+import com.example.data.query_preferences.StoreUserTokenAndId
 import com.example.model.user.UserInfo
 import com.example.ui.R
 import com.example.sign_screen.view_model.SignViewModel
+import javax.inject.Inject
 
-class SignUpFragment : Fragment() {
+class SignUpFragment @Inject constructor() : Fragment() {
 
     private lateinit var loginEditText: EditText
     private lateinit var passwordEditText: EditText
@@ -81,7 +82,7 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show()
                 } else {
                     //val intent = ContentActivity.newIntent(requireContext())
-                    QueryPreferences.setStoredQuery(requireContext(), it.token, it.user.id)
+                    StoreUserTokenAndId.setStoredTokenAndId(requireContext(), it.token, it.user.id)
                     //startActivity(intent)
                     requireActivity().finish()
                 }

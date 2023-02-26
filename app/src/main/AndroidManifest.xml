@@ -27,12 +27,7 @@
         </activity>
 
         <activity
-            android:name="com.example.sign_screen.view.MainActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        </activity>
-
-        <activity
-            android:name="com.example.content_screen.ContentActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
@@ -47,12 +42,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".content_screen.add_place_screen.view.AddPlaceActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.DEFAULT" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

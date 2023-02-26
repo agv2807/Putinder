@@ -13,12 +13,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.data.query_preferences.QueryPreferences
+import com.example.data.query_preferences.StoreUserTokenAndId
 import com.example.model.user.UserInfoAuth
 import com.example.ui.R
 import com.example.sign_screen.view_model.SignViewModel
+import javax.inject.Inject
 
-class SignInFragment : Fragment() {
+class SignInFragment @Inject constructor() : Fragment() {
 
     private lateinit var loginEditText: EditText
     private lateinit var passwordEditText: EditText
@@ -76,9 +77,10 @@ class SignInFragment : Fragment() {
                 if (it == null) {
                     Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show()
                 } else {
-                    QueryPreferences.setStoredQuery(requireContext(), it.token, it.user.id)
+                    StoreUserTokenAndId.setStoredTokenAndId(requireContext(), it.token, it.user.id)
 //                    val intent = ContentActivity.newIntent(requireContext())
 //                    startActivity(intent)
+
                     requireActivity().overridePendingTransition(R.transition.fade_in, R.transition.fade_out)
                     requireActivity().finish()
                 }
