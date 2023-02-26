@@ -18,12 +18,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Putinder"
 include ':app'
-include ':core:data'
-include ':core:model'
-include ':core:network'
+include ':core2:data'
+include ':core2:model'
+include ':core2:network'
 include ':feature'
 include ':feature:sign_screen'
-include ':core:ui'
+include ':core2:ui'
 include ':feature:content_screen'
 include ':feature:content_screen:profile'
 include ':feature:content_screen:swipes'

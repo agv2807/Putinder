@@ -12,11 +12,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/core/data" />
-            <option value="$PROJECT_DIR$/core/model" />
-            <option value="$PROJECT_DIR$/core/network" />
-            <option value="$PROJECT_DIR$/core/ui" />
+            <option value="$PROJECT_DIR$/core2" />
+            <option value="$PROJECT_DIR$/core2/data" />
+            <option value="$PROJECT_DIR$/core2/model" />
+            <option value="$PROJECT_DIR$/core2/network" />
+            <option value="$PROJECT_DIR$/core2/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/content_screen" />
             <option value="$PROJECT_DIR$/feature/content_screen/chat_screen" />

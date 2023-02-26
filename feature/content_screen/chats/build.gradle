@@ -45,7 +45,7 @@ dependencies {
 
     implementation 'com.github.valkriaine:Bouncy:2.3'
 
-    api project(":core:data")
-    api project(":core:model")
-    api project(":core:ui")
+    api project(":core2:data")
+    api project(":core2:model")
+    api project(":core2:ui")
 }

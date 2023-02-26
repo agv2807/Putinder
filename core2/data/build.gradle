@@ -35,6 +35,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
 
-    api project(":core:model")
-    api project(":core:network")
+    api project(":core2:model")
+    api project(":core2:network")
 }

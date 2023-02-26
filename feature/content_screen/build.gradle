@@ -41,5 +41,5 @@ dependencies {
 
     api project(":feature:content_screen:profile")
     api project(":feature:content_screen:swipes")
-    api project(":core:ui")
+    api project(":core2:ui")
 }

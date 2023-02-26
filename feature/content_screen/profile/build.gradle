@@ -51,7 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
 
-    api project(":core:data")
-    api project(":core:model")
-    api project(":core:ui")
+    api project(":core2:data")
+    api project(":core2:model")
+    api project(":core2:ui")
 }
