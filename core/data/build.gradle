@@ -38,6 +38,6 @@ dependencies {
     api 'com.google.dagger:dagger:2.44.2'
     kapt 'com.google.dagger:dagger-compiler:2.44.2'
 
-    api project(":core:model")
-    api project(":core:network")
+    implementation project(":core:model")
+    implementation project(":core:network")
 }

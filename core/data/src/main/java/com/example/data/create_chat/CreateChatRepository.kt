@@ -3,14 +3,16 @@ package com.example.data.create_chat
 import com.example.model.chat.NewChatResponse
 import com.example.model.user.ProfileResponse
 import com.example.network.create_chat_api.Api
+import com.example.network.retrofit.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RestApiService {
+class CreateChatRepository {
+
+    private val retrofit = ServiceBuilder.buildService(Api::class.java)
 
     fun createNewChat(token: String?, userId: String, onResult: (NewChatResponse?) -> Unit) {
-        val retrofit = com.example.network.retrofit.ServiceBuilder.buildService(Api::class.java)
 
         retrofit.createNewChat("Bearer $token", userId).enqueue(
             object : Callback<NewChatResponse> {
@@ -28,7 +30,6 @@ class RestApiService {
     }
 
     fun getUsers(token: String?, onResult: (List<ProfileResponse>?) -> Unit) {
-        val retrofit = com.example.network.retrofit.ServiceBuilder.buildService(Api::class.java)
 
         retrofit.getUsers("Bearer $token").enqueue(
             object : Callback<List<ProfileResponse>> {
@@ -43,7 +44,6 @@ class RestApiService {
                 override fun onFailure(call: Call<List<ProfileResponse>>, t: Throwable) {
                     onResult(null)
                 }
-
             }
         )
     }

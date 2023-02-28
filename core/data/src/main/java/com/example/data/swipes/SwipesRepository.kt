@@ -8,10 +8,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RestApiService {
+class SwipesRepository {
+
+    private val retrofit = ServiceBuilder.buildService(Api::class.java)
 
     fun getPlaces(onResult: (List<PlaceResponse>?) -> Unit) {
-        val retrofit = ServiceBuilder.buildService(Api::class.java)
 
         retrofit.getPlacesResponse().enqueue(
             object : Callback<List<PlaceResponse>> {

@@ -5,23 +5,29 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.profile.RestApiService
+import com.example.data.profile.ProfileRepository
 import com.example.model.user.ProfileResponse
+import com.example.profile.di.DaggerProfileComponent
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
 class ProfileViewModel : ViewModel() {
 
     val userInfoLiveData = MutableLiveData<ProfileResponse>()
     val userPhotoLiveData = MutableLiveData<Uri>()
 
-    private val apiService = RestApiService()
+    @Inject lateinit var apiService: ProfileRepository
 
     private val storageRef = Firebase.storage.reference
 
     private var myToken: String? = null
+
+    init {
+        DaggerProfileComponent.create().inject(this)
+    }
 
     fun loadUserInfo(token: String?) {
         myToken = token

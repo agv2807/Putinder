@@ -12,10 +12,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class RestApiService @Inject constructor() {
+class AuthRepository  constructor() {
+
+    private val retrofit = ServiceBuilder.buildService(Api::class.java)
 
     fun getUserInfoResponse(token: String?, onResult: (ProfileResponse?) -> Unit) {
-        val retrofit = ServiceBuilder.buildService(Api::class.java)
 
         retrofit.getUserInfoResponse("Bearer $token").enqueue(
             object : Callback<ProfileResponse> {
@@ -36,7 +37,6 @@ class RestApiService @Inject constructor() {
     }
 
     fun addUser(userInfo: UserInfo, onResult: (UserResponse?) -> Unit) {
-        val retrofit = com.example.network.retrofit.ServiceBuilder.buildService(Api::class.java)
 
         retrofit.pushPost(userInfo).enqueue(
             object : Callback<UserResponse> {
@@ -53,7 +53,6 @@ class RestApiService @Inject constructor() {
     }
 
     fun authUser(userInfo: UserInfoAuth, onResult: (UserResponse?) -> Unit) {
-        val retrofit = com.example.network.retrofit.ServiceBuilder.buildService(Api::class.java)
 
         retrofit.pushPostAuth(userInfo).enqueue(
             object : Callback<UserResponse> {

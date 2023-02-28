@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.model.chat.NewChatResponse
-import com.example.data.create_chat.RestApiService
+import com.example.data.create_chat.CreateChatRepository
 import com.example.model.user.ProfileResponse
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class CreateChatViewModel : ViewModel() {
 
-    private val apiService = RestApiService()
+    private val apiService = CreateChatRepository()
     private val storageRef = Firebase.storage.reference
 
     val usersListLiveData = MutableLiveData<List<ProfileResponse>>()

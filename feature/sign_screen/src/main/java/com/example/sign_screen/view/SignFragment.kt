@@ -11,7 +11,7 @@ import com.example.sign_screen.di.DaggerSignComponent
 import com.example.ui.R
 import javax.inject.Inject
 
-class SignFragment : Fragment() {
+class SignFragment @Inject constructor() : Fragment() {
 
     @Inject
     lateinit var signInFragment: SignInFragment

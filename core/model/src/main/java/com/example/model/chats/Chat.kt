@@ -1,5 +1,5 @@
-package com.example.model.chats
 
+package com.example.model.chats
 import com.example.model.user.ProfileResponse
 
 data class Chat(

@@ -6,11 +6,13 @@ import com.example.network.retrofit.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class RestApiService {
+class ProfileRepository @Inject constructor() {
+
+    private val retrofit = ServiceBuilder.buildService(Api::class.java)
 
     fun getUserInfoResponse(token: String?, onResult: (ProfileResponse?) -> Unit) {
-        val retrofit = ServiceBuilder.buildService(Api::class.java)
 
         retrofit.getUserInfoResponse("Bearer $token").enqueue(
             object : Callback<ProfileResponse> {
@@ -31,7 +33,6 @@ class RestApiService {
     }
 
     fun updateUserPhoto(token: String?, image: String?, onResult: (ProfileResponse?) -> Unit) {
-        val retrofit = ServiceBuilder.buildService(Api::class.java)
 
         retrofit.updateUserPhoto("Bearer $token", image).enqueue(
             object : Callback<ProfileResponse> {
@@ -52,7 +53,6 @@ class RestApiService {
     }
 
     fun updateUserName(token: String?, name: String?, onResult: (ProfileResponse?) -> Unit) {
-        val retrofit = com.example.network.retrofit.ServiceBuilder.buildService(Api::class.java)
 
         retrofit.updateUserName("Bearer $token", name).enqueue(
             object : Callback<ProfileResponse> {

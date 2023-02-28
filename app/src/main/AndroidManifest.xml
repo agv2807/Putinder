@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Putinder"
         tools:targetApi="31">
 
-        <activity android:name=".application.SplashActivity"
+        <activity android:name=".activities.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Splash">
             <intent-filter>

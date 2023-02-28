@@ -57,12 +57,15 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
     api("androidx.navigation:navigation-dynamic-features-fragment:2.5.3")
 
-    api project(":feature:sign_screen")
-    api project(":feature:chat_screen")
-    api project(":feature:chats")
-    api project(":feature:create_chat")
-    api project(":feature:profile")
-    api project(":feature:swipes")
-    api project(":feature:yandex_map")
-    api project(":core:ui")
+    implementation project(":feature:sign_screen")
+    implementation project(":feature:chat_screen")
+    implementation project(":feature:chats")
+    implementation project(":feature:create_chat")
+    implementation project(":feature:profile")
+    implementation project(":feature:swipes")
+    implementation project(":feature:yandex_map")
+    implementation project(":feature:navigation_menu")
+
+    implementation project(":core:ui")
+    implementation project(":core:data")
 }

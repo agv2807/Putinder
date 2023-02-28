@@ -3,7 +3,7 @@ package com.example.sign_screen.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.authorization.RestApiService
+import com.example.data.authorization.AuthRepository
 import com.example.model.user.UserInfo
 import com.example.model.user.UserInfoAuth
 import com.example.model.user.UserResponse
@@ -13,7 +13,7 @@ class SignViewModel : ViewModel() {
 
     val userInfoLiveData = MutableLiveData<UserResponse?>()
 
-    private val apiService = RestApiService()
+    private val apiService = AuthRepository()
 
     fun updateUserInfo(userInfo: UserInfo) {
         viewModelScope.launch {

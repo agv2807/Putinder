@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.chat.RestApiService
+import com.example.data.chat.ChatRepository
 import com.example.model.chat.MessageResponse
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -16,7 +16,7 @@ import okhttp3.WebSocket
 
 class ChatViewModel : ViewModel() {
 
-    private val apiService = RestApiService()
+    private val apiService = ChatRepository()
     private val storageRef = Firebase.storage.reference
 
     val messagesLiveData = MutableLiveData<List<MessageResponse>>()

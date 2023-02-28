@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.swipes.RestApiService
+import com.example.data.swipes.SwipesRepository
 import com.example.model.place.PlaceResponse
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -16,7 +16,7 @@ class SwipesViewModel : ViewModel() {
     var index = 0
     var place: PlaceResponse? = null
 
-    private val apiService = RestApiService()
+    private val apiService = SwipesRepository()
     private val storageRef = Firebase.storage.reference
 
     init {

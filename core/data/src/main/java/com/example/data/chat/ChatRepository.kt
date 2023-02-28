@@ -7,10 +7,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RestApiService {
+class ChatRepository {
+
+    private val retrofit = ServiceBuilder.buildService(Api::class.java)
 
     fun pushMessage(token: String?, message: String, chatId: String, onResult: (MessageResponse?) -> Unit) {
-        val retrofit = ServiceBuilder.buildService(Api::class.java)
 
         retrofit.pushMessage("Bearer $token", chatId, message).enqueue(
             object : Callback<MessageResponse> {
@@ -31,7 +32,6 @@ class RestApiService {
     }
 
     fun getMessagesList(token: String?, chatId: String, onResult: (List<MessageResponse>?) -> Unit) {
-        val retrofit = com.example.network.retrofit.ServiceBuilder.buildService(Api::class.java)
 
         retrofit.getMessagesList("Bearer $token", chatId).enqueue(
             object : Callback<List<MessageResponse>> {
