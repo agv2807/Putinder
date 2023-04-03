@@ -18,8 +18,8 @@ class LocalWebSocketListener(private val chatViewModel: ChatViewModel) : WebSock
     override fun onMessage(webSocket: WebSocket, text: String) {
         outPut("Received $text")
         val jsonMessageResponse = JSONObject(text)
-        val messageId = jsonMessageResponse.getString("id")
-        val chatId = jsonMessageResponse.getString("chatId")
+//        val messageId = jsonMessageResponse.getString("id")
+//        val chatId = jsonMessageResponse.getString("chatId")
         val messageText = jsonMessageResponse.getString("message")
         val messageDate = jsonMessageResponse.getString("date")
         val userInfo = jsonMessageResponse.getJSONObject("user")
@@ -27,8 +27,7 @@ class LocalWebSocketListener(private val chatViewModel: ChatViewModel) : WebSock
         val userLogin = userInfo.getString("login")
         val userImage = userInfo.getString("image")
         val userId = userInfo.getString("id")
-        val user = ProfileResponse(userLogin, userId, userImage,userName)
-
+        val user = ProfileResponse(userLogin, userId, userImage, userName)
 
         val messages = chatViewModel.messagesLiveData.value?.toMutableList()
         messages?.add(MessageResponse(messageText, messageDate, user))

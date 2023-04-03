@@ -5,6 +5,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/place_info_recycler_view"
+        android:transitionName="shared_element_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

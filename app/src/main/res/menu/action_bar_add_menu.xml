@@ -8,4 +8,10 @@
         android:orderInCategory="100"
         app:showAsAction="always" />
 
+    <item android:id="@+id/exit_icon"
+        android:title="exit"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+
 </menu>

@@ -1,12 +1,15 @@
 package com.example.putinder.content_screen.swipes_screen.view
 
 import android.content.Context
+import android.gesture.GestureOverlayView
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.AttributeSet
+import android.view.*
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.arindicatorview.ARIndicatorView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.putinder.R
 import com.example.putinder.content_screen.swipes_screen.models.PlaceResponse
 import com.example.putinder.content_screen.swipes_screen.view_model.SwipesViewModel
@@ -30,6 +34,9 @@ class SwipesFragment : Fragment(), CardStackListener {
     private var callbacks: Callbacks? = null
 
     private lateinit var cardStackView: CardStackView
+    private lateinit var loader: ProgressBar
+    private lateinit var likeButton: FloatingActionButton
+    private lateinit var dislikeButton: FloatingActionButton
 
     private var swipesViewModel: SwipesViewModel? = null
 
@@ -38,6 +45,8 @@ class SwipesFragment : Fragment(), CardStackListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
+
+        swipesViewModel = ViewModelProvider(requireActivity())[SwipesViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -48,10 +57,15 @@ class SwipesFragment : Fragment(), CardStackListener {
         val view = inflater.inflate(R.layout.fragment_swipes, container, false)
 
         cardStackView = view.findViewById(R.id.card_stack_view)
+        loader = view.findViewById(R.id.loader)
+        likeButton = view.findViewById(R.id.like_button)
+        dislikeButton = view.findViewById(R.id.dislike_button)
+
         val layoutManager = CardStackLayoutManager(requireContext(), this).apply {
             setSwipeableMethod(SwipeableMethod.AutomaticAndManual)
             setOverlayInterpolator(LinearInterpolator())
         }
+
         cardStackView.layoutManager = layoutManager
         cardStackView.adapter = adapter
 
@@ -61,15 +75,41 @@ class SwipesFragment : Fragment(), CardStackListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        swipesViewModel = ViewModelProvider(requireActivity())[SwipesViewModel::class.java]
-
         swipesViewModel?.places?.observe(
             viewLifecycleOwner,
             Observer {
                 adapter = CardStackAdapter(it)
                 cardStackView.adapter = adapter
+                loader.visibility = View.GONE
             }
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        likeButton.setOnClickListener {
+            val setting = SwipeAnimationSetting.Builder()
+                .setDirection(Direction.Right)
+                .setDuration(Duration.Normal.duration)
+                .build()
+            val manager = cardStackView.layoutManager as CardStackLayoutManager
+            manager.apply {
+                setSwipeAnimationSetting(setting)
+            }
+            cardStackView.smoothScrollToPosition(manager.topPosition + 1)
+        }
+
+        dislikeButton.setOnClickListener {
+            val setting = SwipeAnimationSetting.Builder()
+                .setDirection(Direction.Left)
+                .setDuration(Duration.Normal.duration)
+                .build()
+            val manager = cardStackView.layoutManager as CardStackLayoutManager
+            manager.apply {
+                setSwipeAnimationSetting(setting)
+            }
+            cardStackView.smoothScrollToPosition(manager.topPosition + 1)
+        }
     }
 
     override fun onCardDragging(direction: Direction?, ratio: Float) {
@@ -101,16 +141,18 @@ class SwipesFragment : Fragment(), CardStackListener {
         private val rightView: View = itemView.findViewById(R.id.right_view)
         private val pageIndicator: ARIndicatorView = itemView.findViewById(R.id.page_indicator)
 
-
-        private var index = 0
+        private var index = swipesViewModel?.index
 
         fun bind(placeInfo: PlaceResponse) {
             titleTextView.text = placeInfo.title
             descriptionTextView.text = placeInfo.description
+            if (index == null) {
+                index = 0
+            }
             if (placeInfo.uri.isNotEmpty()) {
                 Glide
                     .with(this@SwipesFragment)
-                    .load(placeInfo.uri)
+                    .load(placeInfo.uri[index!!])
                     .centerCrop()
                     .placeholder(R.color.gray)
                     .into(image)
@@ -118,23 +160,25 @@ class SwipesFragment : Fragment(), CardStackListener {
 
             pageIndicator.numberOfIndicators = placeInfo.uri.size
 
-            swipesViewModel?.place = placeInfo
-
             fab.setOnClickListener {
+                swipesViewModel?.place = placeInfo
                 callbacks?.onFabPressed()
             }
 
             titleTextView.setOnClickListener {
+                swipesViewModel?.place = placeInfo
+                swipesViewModel?.index = index!!
                 callbacks?.onOpenCardButtonPressed(image)
             }
 
             leftView.setOnClickListener {
-                if (index > 0) {
-                    index--
-                    pageIndicator.selectedPosition = index
+                if (index!! > 0) {
+                    index = index!! - 1
+                    pageIndicator.selectedPosition = index!!
                     Glide
                         .with(this@SwipesFragment)
-                        .load(placeInfo.uri[index])
+                        .load(placeInfo.uri[index!!])
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerCrop()
                         .placeholder(R.color.gray)
                         .into(image)
@@ -142,12 +186,12 @@ class SwipesFragment : Fragment(), CardStackListener {
             }
 
             rightView.setOnClickListener {
-                if (index < placeInfo.uri.size - 1) {
-                    index++
-                    pageIndicator.selectedPosition = index
+                if (index!! < placeInfo.uri.size - 1) {
+                    index = index!! + 1
+                    pageIndicator.selectedPosition = index!!
                     Glide
                         .with(this@SwipesFragment)
-                        .load(placeInfo.uri[index])
+                        .load(placeInfo.uri[index!!])
                         .centerCrop()
                         .placeholder(R.color.gray)
                         .into(image)

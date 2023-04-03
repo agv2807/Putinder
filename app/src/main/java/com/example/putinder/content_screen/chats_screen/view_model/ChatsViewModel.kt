@@ -5,11 +5,15 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.putinder.content_screen.chats_screen.Chat
+import com.example.putinder.content_screen.chats_screen.models.Chat
 import com.example.putinder.content_screen.chats_screen.api.RestApiService
+import com.example.putinder.content_screen.chats_screen.chat_screen.view_model.LocalWebSocketListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
 
 class ChatsViewModel : ViewModel() {
 
@@ -17,6 +21,19 @@ class ChatsViewModel : ViewModel() {
 
     private val apiService = RestApiService()
     private val storageRef = Firebase.storage.reference
+
+    fun initWebSocket(token: String) {
+        viewModelScope.launch {
+            val client = OkHttpClient()
+            val request: Request = Request.Builder()
+                .header("Authorization", "Bearer $token")
+                .url("wss://routinder-production.up.railway.app/chats/socket")
+                .build()
+
+            val listener = LocalWebSocketListener(this@ChatsViewModel, token)
+            val ws: WebSocket = client.newWebSocket(request, listener)
+        }
+    }
 
     fun loadChatsList(token: String?) {
         viewModelScope.launch {

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.putinder.R
@@ -15,6 +16,8 @@ import com.example.putinder.content_screen.chats_screen.create_chat_screen.view.
 import com.example.putinder.content_screen.map_screen.MapFragment
 import com.example.putinder.content_screen.profile_screen.view.ProfileFragment
 import com.example.putinder.content_screen.swipes_screen.place_card_screen.PlaceCardFragment
+import com.example.putinder.query_preferences.QueryPreferences
+import com.example.putinder.sign_screen.view.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.transition.MaterialContainerTransform
 
@@ -22,7 +25,16 @@ class ContentActivity :
     AppCompatActivity(),
     SwipesFragment.Callbacks,
     ChatsFragment.Callbacks,
-    CreateChatFragment.Callbacks {
+    CreateChatFragment.Callbacks,
+    MapFragment.Callbacks {
+
+    private val chatsFragment = ChatsFragment.newInstance()
+    private val swipesFragment = SwipesFragment.newInstance()
+    private val profileFragment = ProfileFragment.newInstance()
+    private var createChatFragment = CreateChatFragment.newInstance()
+    private var placeCardFragment = PlaceCardFragment.newInstance()
+    private val mapFragment = MapFragment.newInstance()
+    private var activeFragment: Fragment = profileFragment
 
     private lateinit var bottomMenu: BottomNavigationView
 
@@ -35,9 +47,12 @@ class ContentActivity :
         currentFragment = supportFragmentManager.findFragmentById(R.id.container)
 
         if (currentFragment == null) {
-            val fragment = ProfileFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.container, fragment)
+                .add(R.id.container, profileFragment)
+                .add(R.id.container, swipesFragment)
+                .hide(swipesFragment)
+                .add(R.id.container, chatsFragment)
+                .hide(chatsFragment)
                 .commit()
         } else {
             supportFragmentManager.beginTransaction()
@@ -65,71 +80,122 @@ class ContentActivity :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId) {
-            R.id.add_icon -> routeToAddPlaceFragment()
+            R.id.exit_icon -> exitFromAcc()
         }
 
         return true
     }
 
+    override fun onStart() {
+        super.onStart()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when(activeFragment) {
+                    createChatFragment -> deleteCreateChatFragment()
+                    mapFragment -> deleteMapFragment()
+                    placeCardFragment -> deletePlaceCardFragment()
+                    else -> finish()
+                }
+            }
+
+        })
+    }
+
     private fun routeToSwipes() {
-        val fragment = SwipesFragment.newInstance()
-        if (currentFragment != fragment) {
+        if (activeFragment != swipesFragment) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .hide(activeFragment)
+                .show(swipesFragment)
                 .commit()
+            activeFragment = swipesFragment
         }
 
     }
 
     private fun routeToProfile() {
-        val fragment = ProfileFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .commit()
+        if (activeFragment != profileFragment) {
+            supportFragmentManager.beginTransaction()
+                .hide(activeFragment)
+                .show(profileFragment)
+                .commit()
+            activeFragment = profileFragment
+        }
     }
 
     private fun routeToChats() {
-        val fragment = ChatsFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .commit()
+        if (activeFragment != chatsFragment) {
+            supportFragmentManager.beginTransaction()
+                .hide(activeFragment)
+                .show(chatsFragment)
+                .commit()
+            activeFragment = chatsFragment
+        }
     }
 
     private fun routeToCreateChat() {
-        val fragment = CreateChatFragment.newInstance()
+        createChatFragment = CreateChatFragment.newInstance()
+        bottomMenu.visibility = View.GONE
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .addToBackStack("CreateChatFragment")
+            .add(R.id.container, createChatFragment)
+            .hide(activeFragment)
             .commit()
+        activeFragment = createChatFragment
     }
 
-    private fun deleteFragment() {
-        val fragment = ChatsFragment.newInstance()
+    private fun deleteCreateChatFragment() {
+        bottomMenu.visibility = View.VISIBLE
+        activeFragment = chatsFragment
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
+            .remove(createChatFragment)
+            .show(activeFragment)
             .commit()
     }
 
     private fun routeToPlaceCardFragment(view: View) {
-        val fragment = PlaceCardFragment.newInstance()
-        fragment.sharedElementEnterTransition = MaterialContainerTransform()
+        placeCardFragment = PlaceCardFragment.newInstance()
+        placeCardFragment.sharedElementEnterTransition = MaterialContainerTransform()
+        bottomMenu.visibility = View.GONE
         supportFragmentManager.beginTransaction()
             .addSharedElement(view, "shared_element_container")
-            .replace(R.id.container, fragment)
-            .addToBackStack("PlaceCardFragment")
+            .add(R.id.container, placeCardFragment)
+            .hide(activeFragment)
+            .commit()
+        activeFragment = placeCardFragment
+    }
+
+    private fun deletePlaceCardFragment() {
+        bottomMenu.visibility = View.VISIBLE
+        activeFragment = swipesFragment
+        supportFragmentManager.beginTransaction()
+            .remove(placeCardFragment)
+            .show(activeFragment)
             .commit()
     }
 
-    private fun routeToAddPlaceFragment() {
-
+    private fun deleteMapFragment() {
+        bottomMenu.visibility = View.VISIBLE
+        activeFragment = swipesFragment
+        supportFragmentManager.beginTransaction()
+            .remove(mapFragment)
+            .show(activeFragment)
+            .commit()
     }
 
     override fun onFabPressed() {
-        val fragment = MapFragment.newInstance()
+        bottomMenu.visibility = View.GONE
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
+            .add(R.id.container, mapFragment)
+            .hide(activeFragment)
             .addToBackStack("MapFragment")
             .commit()
+        activeFragment = mapFragment
+    }
+
+    private fun exitFromAcc() {
+        val intent = MainActivity.newIntent(this)
+        startActivity(intent)
+        QueryPreferences.setStoredQuery(this, "", "")
+        finish()
     }
 
     override fun onOpenCardButtonPressed(view: View) {
@@ -141,7 +207,7 @@ class ContentActivity :
     }
 
     override fun onNewChatCreated() {
-        deleteFragment()
+        deleteCreateChatFragment()
     }
 
     companion object {
@@ -149,4 +215,9 @@ class ContentActivity :
             return Intent(context, ContentActivity::class.java)
         }
     }
+
+    override fun onMapClosed() {
+        deleteMapFragment()
+    }
+
 }

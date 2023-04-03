@@ -1,53 +1,67 @@
 package com.example.putinder.sign_screen.view
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
-import com.example.putinder.QueryPreferences.QueryPreferences
+import android.widget.Button
+import androidx.fragment.app.Fragment
 import com.example.putinder.R
-import com.example.putinder.content_screen.activity.ContentActivity
-import com.example.putinder.sign_screen.view_model.SignViewModel
 
-class MainActivity : AppCompatActivity(), SignUpFragment.Callbacks, SignInFragment.Callbacks {
+class MainActivity : AppCompatActivity() {
 
-    private val signViewModel: SignViewModel by lazy {
-        ViewModelProvider(this)[SignViewModel::class.java]
-    }
+    private val signInFragment = SignInFragment.newInstance()
+    private val signUpFragment = SignUpFragment.newInstance()
+    private var activeFragment: Fragment = signInFragment
+
+    private lateinit var signButton: Button
+    private lateinit var signUpButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        signButton = findViewById(R.id.sign_text_view)
+        signUpButton = findViewById(R.id.sign_up_text_view)
+
         val currentFragment = supportFragmentManager.findFragmentById(R.id.main_container)
 
         if (currentFragment == null) {
-            val fragment = SignInFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.main_container, fragment)
+                .add(R.id.main_container, signInFragment)
+                .add(R.id.main_container, signUpFragment)
+                .hide(signUpFragment)
                 .commit()
         }
+    }
 
-        val token = QueryPreferences.getStoredToken(this)
-        if (signViewModel.checkToken(token)) {
-            val intent = ContentActivity.newIntent(this)
-            startActivity(intent)
+    override fun onStart() {
+        super.onStart()
+        signButton.setOnClickListener {
+            signUpButton.setTextColor(resources.getColor(R.color.gray))
+            signButton.setTextColor(resources.getColor(R.color.white))
+            supportFragmentManager.beginTransaction()
+                .hide(activeFragment)
+                .show(signInFragment)
+                .commit()
+            activeFragment = signInFragment
+        }
+
+        signUpButton.setOnClickListener {
+            signUpButton.setTextColor(resources.getColor(R.color.white))
+            signButton.setTextColor(resources.getColor(R.color.gray))
+            supportFragmentManager.beginTransaction()
+                .hide(activeFragment)
+                .show(signUpFragment)
+                .commit()
+            activeFragment = signUpFragment
         }
     }
 
-    override fun onAuthPressed() {
-        val fragment = SignInFragment.newInstance()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_container, fragment)
-            .commit()
-    }
-
-    override fun onRegPressed() {
-        val fragment = SignUpFragment.newInstance()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_container, fragment)
-            .commit()
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
     }
 
 }

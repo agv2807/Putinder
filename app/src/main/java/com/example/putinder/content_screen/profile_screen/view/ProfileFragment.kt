@@ -1,33 +1,46 @@
 package com.example.putinder.content_screen.profile_screen.view
 
-import android.app.Activity
-import android.content.Intent
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.elyeproj.loaderviewlibrary.LoaderImageView
+import com.elyeproj.loaderviewlibrary.LoaderTextView
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.profile_screen.models.ProfileResponse
 import com.example.putinder.content_screen.profile_screen.view_model.ProfileViewModel
-
-private const val REQUEST_CODE = 3
+import com.example.putinder.sign_screen.view.MainActivity
 
 class ProfileFragment : Fragment() {
 
-    private lateinit var profilePhoto: ImageView
-    private lateinit var userNameTextView: TextView
+    private lateinit var profilePhoto: LoaderImageView
+    private lateinit var userNameTextView: LoaderTextView
 
     private val profileViewModel: ProfileViewModel by lazy {
         ViewModelProvider(this)[ProfileViewModel::class.java]
+    }
+
+    private lateinit var getContent: ActivityResultLauncher<String>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+                uri: Uri? ->
+            if (uri != null) {
+                profileViewModel.uploadPhoto(uri)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -48,10 +61,15 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         profilePhoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_CODE)
+            getContent.launch("image/*")
+            profilePhoto.resetLoader()
+
+        }
+
+        userNameTextView.setOnClickListener {
+            showChangeNameDialog()
         }
     }
 
@@ -71,26 +89,27 @@ class ProfileFragment : Fragment() {
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            if (data?.data != null) {
-                profileViewModel.uploadPhoto(data.data!!)
-            }
-        }
-    }
-
     private fun updateUserPhoto(uri: Uri) {
         Glide
             .with(this)
             .load(uri)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
-            .placeholder(R.color.gray)
             .into(profilePhoto)
     }
 
     private fun updateUI(userResponse: ProfileResponse) {
         userNameTextView.text = userResponse.name
+    }
+
+    private fun showChangeNameDialog() {
+        val dialog = EditTextDialog.newInstance(userNameTextView.text.toString())
+        dialog.onOk = {
+            val newName = dialog.editText.text.toString()
+            profileViewModel.updateUserName(newName)
+            userNameTextView.resetLoader()
+        }
+        dialog.show(this@ProfileFragment.requireFragmentManager(), "editDescription")
     }
 
     companion object {

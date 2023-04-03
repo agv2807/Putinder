@@ -2,18 +2,20 @@ package com.example.putinder.sign_screen.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfoAuth
@@ -21,25 +23,15 @@ import com.example.putinder.sign_screen.view_model.SignViewModel
 
 class SignInFragment : Fragment() {
 
-    interface Callbacks {
-        fun onRegPressed()
-    }
-
     private lateinit var loginEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var signButton: Button
-    private lateinit var regTextView: TextView
     private lateinit var loader: ProgressBar
+    private lateinit var forgotPassword: TextView
+    private lateinit var containerLayout: RelativeLayout
 
     private val signViewModel: SignViewModel by lazy {
         ViewModelProvider(this)[SignViewModel::class.java]
-    }
-
-    private var callbacks: Callbacks? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
     }
 
     override fun onCreateView(
@@ -53,8 +45,9 @@ class SignInFragment : Fragment() {
         loginEditText = view.findViewById(R.id.login_edit_text)
         passwordEditText = view.findViewById(R.id.password_edit_text)
         signButton = view.findViewById(R.id.sign_button)
-        regTextView = view.findViewById(R.id.reg_text_view)
         loader = view.findViewById(R.id.loader)
+        forgotPassword = view.findViewById(R.id.forgot_password_text_view)
+        containerLayout = view.findViewById(R.id.container)
 
         return view
     }
@@ -63,14 +56,14 @@ class SignInFragment : Fragment() {
         super.onStart()
 
         signButton.setOnClickListener {
-            onLoadResume()
-            val userInfoAuth = UserInfoAuth(loginEditText.text.toString(),
-            passwordEditText.text.toString())
-            signViewModel.updateAuthUserInfo(userInfoAuth)
-        }
-
-        regTextView.setOnClickListener {
-            callbacks?.onRegPressed()
+            if (loginEditText.text.isEmpty() || passwordEditText.text.isEmpty()) {
+                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
+            } else {
+                onLoadResume()
+                val userInfoAuth = UserInfoAuth(loginEditText.text.toString(),
+                    passwordEditText.text.toString())
+                signViewModel.updateAuthUserInfo(userInfoAuth)
+            }
         }
     }
 
@@ -87,6 +80,8 @@ class SignInFragment : Fragment() {
                     QueryPreferences.setStoredQuery(requireContext(), it.token, it.user.id)
                     val intent = ContentActivity.newIntent(requireContext())
                     startActivity(intent)
+                    requireActivity().overridePendingTransition(R.transition.fade_in, R.transition.fade_out)
+                    requireActivity().finish()
                 }
             }
         )
@@ -94,18 +89,12 @@ class SignInFragment : Fragment() {
 
     private fun onLoadResume() {
         loader.visibility = View.VISIBLE
-        loginEditText.visibility = View.GONE
-        passwordEditText.visibility = View.GONE
-        signButton.visibility = View.GONE
-        regTextView.visibility = View.GONE
+        containerLayout.visibility = View.GONE
     }
 
     private fun onLoadFinish() {
         loader.visibility = View.GONE
-        loginEditText.visibility = View.VISIBLE
-        passwordEditText.visibility = View.VISIBLE
-        signButton.visibility = View.VISIBLE
-        regTextView.visibility = View.VISIBLE
+        containerLayout.visibility = View.VISIBLE
     }
 
     companion object {

@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class SwipesViewModel : ViewModel() {
 
     val places = MutableLiveData<List<PlaceResponse>>()
+    var index = 0
     var place: PlaceResponse? = null
 
     private val apiService = RestApiService()
@@ -32,7 +33,7 @@ class SwipesViewModel : ViewModel() {
                         response.images.forEach { id ->
                             storageRef.child("images/${id}").downloadUrl.addOnSuccessListener { uri ->
                                 response.uri.add(uri)
-                                places.value = listPlaceResponse
+                                places.value = listPlaceResponse!!
                             }.addOnFailureListener {
                                 Log.d("TAG", "Error load photo")
                             }

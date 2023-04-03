@@ -1,52 +1,38 @@
 package com.example.putinder.sign_screen.view
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.putinder.QueryPreferences.QueryPreferences
+import com.example.putinder.query_preferences.QueryPreferences
 import com.example.putinder.R
 import com.example.putinder.content_screen.activity.ContentActivity
 import com.example.putinder.sign_screen.models.UserInfo
 import com.example.putinder.sign_screen.view_model.SignViewModel
 
-private const val REQUEST_CODE = 3
-
 class SignUpFragment : Fragment() {
-
-    interface Callbacks {
-        fun onAuthPressed()
-    }
 
     private lateinit var loginEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var nameEditText: EditText
     private lateinit var confirmPasswordEditText: EditText
     private lateinit var signButton: Button
-    private lateinit var authTextView: TextView
-    private lateinit var addPhotoImageView: ImageView
-    private lateinit var photoImageView: ImageView
     private lateinit var loader: ProgressBar
+    private lateinit var containerLayout: RelativeLayout
 
     private var photoId = ""
 
     private val signViewModel: SignViewModel by lazy {
         ViewModelProvider(this)[SignViewModel::class.java]
-    }
-
-    private var callbacks: Callbacks? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
     }
 
     override fun onCreateView(
@@ -62,10 +48,8 @@ class SignUpFragment : Fragment() {
         signButton = view.findViewById(R.id.sign_button)
         nameEditText = view.findViewById(R.id.name_edit_text)
         confirmPasswordEditText = view.findViewById(R.id.confirm_password_edit_text)
-        authTextView = view.findViewById(R.id.auth_text_view)
-        addPhotoImageView = view.findViewById(R.id.user_photo_image_view)
-        photoImageView = view.findViewById(R.id.photo_image_view)
         loader = view.findViewById(R.id.loader)
+        containerLayout = view.findViewById(R.id.container)
 
         return view
     }
@@ -74,22 +58,19 @@ class SignUpFragment : Fragment() {
         super.onStart()
 
         signButton.setOnClickListener {
-            onLoadResume()
-            val userInfo = UserInfo(loginEditText.text.toString(),
-                passwordEditText.text.toString(),
-                nameEditText.text.toString(),
-                photoId)
-            signViewModel.updateUserInfo(userInfo)
-        }
-
-        authTextView.setOnClickListener {
-            callbacks?.onAuthPressed()
-        }
-
-        addPhotoImageView.setOnClickListener {
-           val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_CODE)
+            if (loginEditText.text.isEmpty() || passwordEditText.text.isEmpty()
+                || nameEditText.text.isEmpty() || confirmPasswordEditText.text.isEmpty()) {
+                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
+            } else if (passwordEditText.text.toString() != confirmPasswordEditText.text.toString()){
+                Toast.makeText(requireContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show()
+            } else {
+                onLoadResume()
+                val userInfo = UserInfo(loginEditText.text.toString(),
+                    passwordEditText.text.toString(),
+                    nameEditText.text.toString(),
+                    photoId)
+                signViewModel.updateUserInfo(userInfo)
+            }
         }
     }
 
@@ -106,60 +87,20 @@ class SignUpFragment : Fragment() {
                     val intent = ContentActivity.newIntent(requireContext())
                     QueryPreferences.setStoredQuery(requireContext(), it.token, it.user.id)
                     startActivity(intent)
+                    requireActivity().finish()
                 }
             }
         )
-
-        signViewModel.userPhotoLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                Glide
-                    .with(this)
-                    .load(it)
-                    .centerCrop()
-                    .placeholder(R.color.gray)
-                    .into(photoImageView)
-            }
-        )
-
-        signViewModel.photoIdLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                photoId = it
-            }
-        )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            if (data?.data != null) {
-                signViewModel.uploadPhoto(data.data!!)
-            }
-        }
     }
 
     private fun onLoadResume() {
         loader.visibility = View.VISIBLE
-        loginEditText.visibility = View.GONE
-        passwordEditText.visibility = View.GONE
-        signButton.visibility = View.GONE
-        nameEditText.visibility = View.GONE
-        confirmPasswordEditText.visibility = View.GONE
-        authTextView.visibility = View.GONE
-        addPhotoImageView.visibility = View.GONE
-
+        containerLayout.visibility = View.GONE
     }
 
     private fun onLoadFinish() {
         loader.visibility = View.GONE
-        loginEditText.visibility = View.VISIBLE
-        passwordEditText.visibility = View.VISIBLE
-        signButton.visibility = View.VISIBLE
-        nameEditText.visibility = View.VISIBLE
-        confirmPasswordEditText.visibility = View.VISIBLE
-        authTextView.visibility = View.VISIBLE
-        addPhotoImageView.visibility = View.VISIBLE
+        containerLayout.visibility = View.VISIBLE
     }
 
     companion object {

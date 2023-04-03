@@ -1,7 +1,7 @@
-package com.example.putinder.QueryPreferences
+package com.example.putinder.query_preferences
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 private const val PREF_SEARCH_TOKEN = "searchToken"
 private const val PREF_SEARCH_ID = "searchId"
